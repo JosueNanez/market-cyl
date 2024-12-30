@@ -1,0 +1,184 @@
+/* Contenedor del carrusel */
+.contenedor-carrusel {
+	position: relative;
+	width: 100%;
+	/*height: 100vh;*/
+	/* Ocupa toda la pantalla */
+	overflow: scroll;
+	overflow-x: hidden;
+	/* Oculta los slides que están fuera de la vista */
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+/* Contenedor de los slides */
+.carrusel-deslizar {
+	display: flex;
+	width: 100%;
+	/* Tres slides, cada uno ocupa 100% */
+	transition: transform 0.8s ease-in-out;
+	/* Transición suave */
+}
+
+/* Cada slide */
+.carrusel-articulo {
+	flex: 0 0 100%;
+	/* Cada slide ocupa el 100% del contenedor visible */
+	/*height: 100vh;*/
+	/*height: auto;*/
+	/* Cada slide ocupa toda la altura de la pantalla */
+	max-width: 100%;
+	display: flex;
+	/*justify-content: center;
+	align-items: center;*/
+	flex-direction: column;
+	background-color: #f4f4f4;
+	/*text-align: center;
+	/*padding: 20px;*/
+	font-size: 18px;
+	box-sizing: border-box;
+} 
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Evitar desbordes horizontales */
+}
+
+
+
+
+
+/* ----------------- ESTILOS COMPRAS FREEZE ---------------*/
+.background-title-container {
+    position: relative;
+}
+
+.background-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem; /* Ajusta el tamaño de la fuente según lo necesario */
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.5); /* Color semi-transparente */
+    z-index: 0;
+    text-align: center;
+    pointer-events: none; /* Evita que interfiera con los clics */
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+#savedLists {
+    position: relative;
+    z-index: 1; /* Asegura que el contenido esté por encima del texto de fondo */
+}
+
+/* ----------------- IMAGENES ---------------*/
+
+.category-card {
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    background-color: #f8f9fa; /* Para mejor contraste */
+	margin-bottom: 20px;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+}
+
+.category-image {
+    width: 100%;
+    height: auto;  /*Permite mantener la proporción en tamaños responsive */
+    max-height: 140px;  /*Define una altura máxima */
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.category-card:hover .category-image {
+    transform: scale(1.2);
+}
+
+.category-card h5 {
+    margin-top: 10px;
+    color: #333;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+
+/* Ajustes para diferentes tamaños de pantalla */
+@media (max-width: 768px) {
+    .category-card {
+        margin-bottom: 20px; /* Espacio entre elementos en pantallas más pequeñas */
+    }
+
+    .category-card h5 {
+        font-size: 0.9rem; /* Ajustar texto en pantallas pequeñas */
+    }
+
+    .category-image {
+        max-height: 140px; /* Reducir altura de la imagen en pantallas pequeñas */
+    }
+}
+
+@media (max-width: 430px) {
+    .category-image {
+        max-height: 120px;
+    }
+	
+    .category-card h5 {
+        font-size: 0.8rem;
+    }
+
+
+}
+
+
+
+
+
+
+/*SCROLL CATEGORIAS SIN MOSTRAR BARRA DESPLAZAMIENTO*/
+.custom-scroll-container {
+    /*width: 100%;  Ancho completo 
+    height: 300px;  Altura fija para ejemplo */
+    overflow: hidden;  /*Oculta barras de desplazamiento */
+    position: relative;  /*Necesario para posicionamiento absoluto */
+	scroll-behavior: smooth;
+
+}
+/* Contenido desplazable */
+.custom-scroll-content {
+    height: auto;
+    position: absolute;
+   /* width: calc(100% - 20px);  Respeta padding */
+    overflow: hidden;
+}
+
+/* Opcional: Deshabilitar el comportamiento suave para evitar retrasos */
+@media (hover: none) {
+    .custom-scroll-container {
+        scroll-behavior: auto; /* Deshabilitar transición suave en móviles */
+    }
+}
+
+
+
+
+
+
+/* FORMATO PARA QUE .dropdown-menu SE DESPLIEGUE HACIA ARRIBA */
+.sugerenciasAccesoDirecto .dropdown-menu {
+    position: absolute;
+    bottom: 100%;  /* Asegura que el menú se despliegue hacia arriba */
+    left: 0;
+    z-index: 1050; /* Opcional: Asegura que el dropdown esté por encima de otros elementos */
+	
+}
