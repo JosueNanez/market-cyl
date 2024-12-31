@@ -7,10 +7,25 @@ const inputReceptor = document.getElementById("buscadorProducto");
 let textScaned = "";
 let inputVal = "";
 
+
 // Función para iniciar el lector
 async function startBarcodeScanner() {
+	let stream;
+	try {
+		// Solicitamos permiso de uso de cámaras al navegador
+		stream = await navigator.mediaDevices.getUserMedia({ video: true });
+		console.log('Acceso a la cámara concedido.');
+		stream.getTracks().forEach(track => track.stop());
+		console.log('Cámara apagada.');
+	} catch (err) {
+		console.error('Error al acceder a la cámara:', err);
+		alert('No se pudo acceder a la cámara. Asegúrate de que el navegador tenga permisos.');
+	}
+
+
+
 	let isProcessing = false; // Bloqueo temporal
-	
+
 	try {
 		// Solicitar acceso a la cámara
 		const selectedDeviceId = (await codeReader.listVideoInputDevices())[1]?.deviceId;
@@ -27,21 +42,21 @@ async function startBarcodeScanner() {
 			(result, error) => {
 				if (result && !isProcessing) {
 					isProcessing = true; // Bloquea nuevas detecciones
-					
+
 					// Mostrar el código detectado
 					//textScaned = textScaned + result + ", ";
 					detectedCodeLabel.textContent = `Código detectado: ${result}`;
-					
+
 					//Envia datos al input
 					inputVal = result;
-					
+
 					inputReceptor.value = inputVal;
 					inputReceptor.dispatchEvent(new Event('input')); // Dispara el evento 'input' manualmente.
-					
+
 					playBeepSound();
 					// Generar vibración suave (200ms)
 					if (navigator.vibrate) {
-					    navigator.vibrate(200); // Vibrar por 200ms
+						navigator.vibrate(200); // Vibrar por 200ms
 					}
 					// Renderizar imagen de depuración
 					//drawDebugImage(videoElement, canvasElement);
@@ -49,7 +64,7 @@ async function startBarcodeScanner() {
 					setTimeout(() => {
 						isProcessing = false;
 					}, 2000);
-					
+
 				}
 				if (error && !(error instanceof ZXing.NotFoundException)) {
 					console.error(error);
@@ -78,8 +93,8 @@ function drawDebugImage(video, canvas) {
 	context.drawImage(video, 0, 0, canvas.width, canvas.height);
 	canvas.style.display = 'block';
 	setTimeout(() => {
-	  // Limpiar el canvas (elimina la imagen de depuración)
-	  context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+		// Limpiar el canvas (elimina la imagen de depuración)
+		context.clearRect(0, 0, canvasElement.width, canvasElement.height);
 	}, 2000);  // 1000ms = 1 segundo
 }
 
