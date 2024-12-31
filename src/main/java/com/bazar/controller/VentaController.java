@@ -1,6 +1,5 @@
 package com.bazar.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.bazar.entity.Categoria;
 import com.bazar.entity.DetalleProducto;
 import com.bazar.entity.Producto;
 import com.bazar.service.CategoriaService;
@@ -42,12 +40,7 @@ public class VentaController {
 
 	@GetMapping("/lista")
 	public String listarCategorias(Model modelo, Model modPro) {
-		List<Categoria> categorias =  servicioCategoria.listarCategorias();
-	    if (categorias == null) {
-	        categorias = new ArrayList<>(); // Inicializa una lista vacía si es nulo
-	    }
-	    
-		modelo.addAttribute("categorias", categorias);
+		modelo.addAttribute("categorias", servicioCategoria.listarCategorias());
 		modPro.addAttribute("productos", servicioProducto.listaProductosPorCategoria("EMBUTIDOS"));
 		return "index";
 	}
