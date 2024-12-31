@@ -4,6 +4,40 @@ let productName = "";
 let productList = {};
 let savedClients = {};
 
+
+
+// Función para solicitar acceso a la cámara y luego apagarla
+async function requestCameraAccess() {
+    let stream;
+    try {
+        // Solicitamos acceso a la cámara sin hacer nada con el stream
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+        // Si se concede el acceso, mostramos un mensaje
+        console.log('Acceso a la cámara concedido.');
+
+        // Apagar la cámara después de 2 milisegundos
+        setTimeout(() => {
+            // Detener todos los tracks del stream (apaga la cámara)
+            stream.getTracks().forEach(track => track.stop());
+            console.log('Cámara apagada después de 2 milisegundos.');
+        }, 2); // 2 milisegundos
+    } catch (err) {
+        // Si ocurre un error (como no conceder permisos), mostramos un mensaje
+        console.error('Error al acceder a la cámara:', err);
+        alert('No se pudo acceder a la cámara. Asegúrate de que el navegador tenga permisos.');
+    }
+}
+
+// Función que se ejecuta cuando el documento está completamente cargado
+document.addEventListener('DOMContentLoaded', () => {
+    // Llamamos a la función de acceso a la cámara al cargar la página
+    requestCameraAccess();
+});
+
+
+
+
 // AL INICIAR
 document.addEventListener('DOMContentLoaded', async () => {
 	const contenedorListado = document.getElementById("listadoAccesos");
