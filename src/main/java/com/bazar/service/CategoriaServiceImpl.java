@@ -17,7 +17,9 @@ public class CategoriaServiceImpl implements CategoriaService{
 	
 	@Override
 	public List<Categoria> listarCategorias() {
-		return repositorio.findAll();
+	    List<Categoria> categorias = repositorio.findAll();
+	    System.out.println("Categorías recuperadasServ: " + categorias);
+	    return categorias;
 	}
 
 }

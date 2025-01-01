@@ -46,7 +46,7 @@ public class VentaController {
 	    if (categorias == null) {
 	        categorias = new ArrayList<>(); // Inicializa una lista vacía si es nulo
 	    }
-		
+	    System.out.println("Tamaño de categorías recuperadas: " + (categorias != null ? categorias.size() : 0));
 		modelo.addAttribute("categorias", categorias);
 		modPro.addAttribute("productos", servicioProducto.listaProductosPorCategoria("EMBUTIDOS"));
 		return "index";
