@@ -42,12 +42,7 @@ public class VentaController {
 
 	@GetMapping("/lista")
 	public String listarCategorias(Model modelo, Model modPro) {
-	    List<Categoria> categorias = servicioCategoria.listarCategorias();
-	    if (categorias == null) {
-	        categorias = new ArrayList<>(); // Inicializa una lista vacía si es nulo
-	    }
-	    System.out.println("Tamaño de categorías recuperadas: " + (categorias != null ? categorias.size() : 0));
-		modelo.addAttribute("categorias", categorias);
+		modelo.addAttribute("categorias", servicioCategoria.listarCategorias());
 		modPro.addAttribute("productos", servicioProducto.listaProductosPorCategoria("EMBUTIDOS"));
 		return "index";
 	}

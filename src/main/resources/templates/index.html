@@ -64,9 +64,6 @@
 					<div class="custom-scroll-container" id="conteneCategoria">
 						<div class="custom-scroll-content">
 
-							<div th:if="${categorias != null}" th:text="${categorias.size()}"></div>
-							<div th:unless="${categorias != null}">No se encontraron categorías.</div>
-							
 							<div class="row">
 								<div class="col-md-3 col-6" th:each="cat : ${categorias}">
 
