@@ -124,4 +124,9 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 	}
 
+	@Override
+	public List<Producto> obtenerProductosPorCategoria(String nomcateg) {
+		return productoRepository.findProductosByNomCateg(nomcateg);
+	}
+
 }

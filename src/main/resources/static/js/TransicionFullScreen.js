@@ -174,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //ALTURA CONTENEDOR ACCCESOS DIRECTOS
 document.addEventListener('DOMContentLoaded', () => {
 	// Obtener elementos del DOM
-	const navbar = document.getElementById('nav');
 	const fixedDiv = document.getElementById('freezeventas');
 	const pieDiv = document.getElementById('pieAccesoDirecto');
 	
@@ -193,11 +192,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	const pieDivHeight = pieDiv.offsetHeight + pieDivMarginTop + pieDivMarginBottom;
 
 	// Obtener altura de navbar
+	const navbar = document.getElementById('nav');
 	const navbarHeight = navbar.offsetHeight;
-
-	// Sumar las alturas
-	const sumaAltura = navbarHeight + fixedDivHeight + pieDivHeight;
-
+	
+	let sumaAltura = 0;
+	
+	const anchoVentana = window.innerWidth;
+	//Anchos: 115 grande, 60 celular
+	if (anchoVentana >= 800) {
+		// Sumar las alturas en pantalla grande
+		sumaAltura = navbarHeight + fixedDivHeight + pieDivHeight;
+	} else {
+		//Sumar alturas en pantalla chica
+		sumaAltura = fixedDivHeight + pieDivHeight;
+	}
+	
 	// Calcular la altura restante
 	const alturaPantalla = window.innerHeight;
 	const alturaRestante = alturaPantalla - sumaAltura;
@@ -212,8 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		dynamicDiv.style.height = `${alturaRestante}px`;
 	});
 });
-
-
 
 
 

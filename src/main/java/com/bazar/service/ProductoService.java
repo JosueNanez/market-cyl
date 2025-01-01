@@ -34,4 +34,6 @@ public interface ProductoService {
 	public DetalleProducto actualizarDetalleProducto(String nomprod, DetalleProducto detalleproducto);
 	
 	public void actualizarPrecios(String nomprod, BigDecimal preccompra, BigDecimal precventa);
+	
+	public List<Producto> obtenerProductosPorCategoria(String nomcateg);
 }

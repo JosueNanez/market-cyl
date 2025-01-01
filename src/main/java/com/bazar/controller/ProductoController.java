@@ -163,6 +163,12 @@ public class ProductoController {
 		return servicio.BusquedaDimanProductoMante(param);
 	}
 	
+	@GetMapping("/prodporcategoria")
+	@ResponseBody
+	public List<Producto> productosporCategoria(@RequestParam() String nomcateg){
+		return servicio.obtenerProductosPorCategoria(nomcateg);
+	}
+	
 	@GetMapping("/ProductoPorCodigo") 
 	@ResponseBody
 	public Producto obtenerporCodigo(@RequestParam() String codigo) {
@@ -172,14 +178,7 @@ public class ProductoController {
 		}
 		return producto;
 	}
-	
-	
-	//ACCESOS DIRECTOS
-	/*@GetMapping("/updateAcceso")
-	@ResponseBody
-	public Producto actualizarAcceso(@RequestParam() String nomProd, @RequestParam() int acceso) {
-		return servicioProducto.actualizarAccRapido(nomProd, acceso);
-	}*/
+
 	
 	@GetMapping("/actualizarPrecios")
     @ResponseBody

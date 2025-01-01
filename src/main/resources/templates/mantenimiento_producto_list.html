@@ -56,12 +56,23 @@
 		<div class="text-center my-4">
 			<h2>Productos por Nombre</h2>
 		</div>
-		<div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4">
-			<input type="text" id="buscadorProducto" autofocus class="form-control" placeholder="🔎 Buscar"
-				oninput="buscar(this, 'registrosFiltrados')">
-			<div class="dropdown">
-				<ul id="suggestions-1" class="dropdown-menu"></ul>
+		<div class="row" style="display: flex;">
+			<div class="col-5 col-sm-5 col-md-5 col-lg-3 mb-4">
+				<input type="text" id="buscadorProducto" autofocus class="form-control" placeholder="🔎 Buscar"
+					oninput="buscar(this, 'registrosFiltrados')">
+				<div class="dropdown">
+					<ul id="suggestions-1" class="dropdown-menu"></ul>
+				</div>
 			</div>
+
+			<div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4">
+				<select class="form-select" id="nomcateg" name="nomcateg" >
+					<option value="" selected>Categorias</option>
+					<option th:each="categoria : ${categorias}" th:value="${categoria.nomcateg}"
+						th:text="${categoria.nomcateg}">Categoría</option>
+				</select>
+			</div>
+			
 		</div>
 	</div>
 
@@ -157,7 +168,7 @@
 	<script src="/js/BotonAlertSweet.js" defer></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="/js/tablaProductoMant.js"></script>
-	
+
 	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -166,4 +177,3 @@
 </body>
 
 </html>
-

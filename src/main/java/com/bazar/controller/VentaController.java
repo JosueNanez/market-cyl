@@ -1,6 +1,4 @@
 package com.bazar.controller;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.bazar.entity.Categoria;
 import com.bazar.entity.DetalleProducto;
 import com.bazar.entity.Producto;
 import com.bazar.service.CategoriaService;

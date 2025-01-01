@@ -19,6 +19,9 @@ public interface ProductoRepository extends JpaRepository<Producto, String>{
 	@Query(value = "call consultarporproductomant(:nomprod)", nativeQuery = true)
 	List<Producto> busquedaDinamicaProdMant(@Param("nomprod") String nomprod);
 	
-	//void deleteByCodpro(String codpro);
+	@Query("SELECT p FROM Producto p JOIN p.detalleproducto dp WHERE dp.nomcateg = :nomcateg")
+	List<Producto> findProductosByNomCateg(@Param("nomcateg") String nomcateg);
+	
+
 
 }
