@@ -287,7 +287,7 @@ document.getElementById('nomcateg').addEventListener('change', async function() 
 			//console.log('Lista de productos:', productos);
 
 			// Puedes iterar sobre la lista de productos si es necesario
-			productos.slice(0, 10).forEach(prod => {
+			productos.forEach(prod => {
 
 				const fila = document.createElement('tr');
 				
