@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Mostrar el segundo slide inmediatamente
 	const offset = -currentIndex * 100;
 	carouselSlide.style.transform = `translateX(${offset}%)`;
-	//carouselSlide.style.transition = 'none'; // Sin transición para aplicar directamente
+	carouselSlide.style.transition = 'none'; // Sin transición para aplicar directamente
 
 	//Autofocus para el input buscador luego de la transición
 	const inputbuscador = document.getElementById('buscadorProducto');
