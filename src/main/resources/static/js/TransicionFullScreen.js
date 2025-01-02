@@ -127,7 +127,69 @@ document.addEventListener('DOMContentLoaded', () => {
 		const alturaRestante = alturaPantalla - sumaAltura;
 		dynamicDiv.style.height = `${alturaRestante}px`;
 	});
+	
+	cargarCategorias();
 });
+
+
+
+async function cargarCategorias(){
+	
+	const contenedor = document.getElementById('contenedorCategorias');
+	
+	try {
+		const response = await fetch(`/venta/categorias`)
+		if (!response.ok){
+			throw new Error(`Error en la respuesta de categorias.`)
+		}
+		const categorias = await response.json();
+		console.log(categorias);
+		
+		contenedor.innerHTML = '';
+
+		        // Iterar sobre las categorías y crear el HTML dinámicamente
+		        categorias.forEach(cat => {
+		            // Crear el contenedor de la categoría
+		            const colDiv = document.createElement('div');
+		            colDiv.className = 'col-md-3 col-6';
+
+		            // Crear la tarjeta de categoría
+		            const cardDiv = document.createElement('div');
+		            cardDiv.className = 'category-card';
+		            cardDiv.setAttribute('data-bs-toggle', 'modal');
+		            cardDiv.setAttribute('data-bs-target', '#categoryModal');
+		            cardDiv.setAttribute('onclick', `abrirModal('${cat.nomcateg}')`);
+
+		            // Crear la imagen de la categoría
+		            const img = document.createElement('img');
+		            img.className = 'category-image img-thumbnail rounded';
+		            img.src = `/images/${cat.nomcateg}.png`; // Ruta de la imagen
+		            img.alt = 'Categoría';
+		            img.loading = 'lazy';
+
+		            // Crear el título de la categoría
+		            const title = document.createElement('h5');
+		            title.className = 'text-center mt-2';
+		            title.textContent = cat.nomcateg;
+
+		            // Agregar los elementos a la tarjeta y al contenedor
+		            cardDiv.appendChild(img);
+		            cardDiv.appendChild(title);
+		            colDiv.appendChild(cardDiv);
+		            contenedor.appendChild(colDiv);
+		        });
+		
+		
+		
+		
+	} catch (error) {
+		console.error(" MS JOSUE, Error al buscar categorias:", error);
+	}
+	
+}
+
+
+
 
 
 

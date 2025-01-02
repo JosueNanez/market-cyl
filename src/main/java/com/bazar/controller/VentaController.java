@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.bazar.entity.Categoria;
 import com.bazar.entity.DetalleProducto;
 import com.bazar.entity.Producto;
 import com.bazar.service.CategoriaService;
@@ -50,6 +51,12 @@ public class VentaController {
 	@ResponseBody
 	public List<DetalleProducto> obtenerProdCategoria(@RequestParam() String categor){
 		return servicioProducto.listaProductosPorCategoria(categor);
+	}
+	
+	@GetMapping("/categorias")
+	@ResponseBody
+	public List<Categoria> obtenerCategorias(){
+		return servicioCategoria.listarCategorias();
 	}
 	
 	@GetMapping("/ProductoPorCodigo")
