@@ -42,9 +42,14 @@ public class ProductoController {
 	
 	//CONSULTA HTML
 	@GetMapping("/lista")
-	public String listaProductos(Model proveed, Model categ) {
+	public String listaProductos(Model proveed, Model categ, @RequestParam(value = "selectedCateg", required = false) String selectedCateg) {
 	    proveed.addAttribute("proveedores", servProveedor.listarProveedores());
 	    categ.addAttribute("categorias", servCategoria.listarCategorias());
+	    
+	    if (selectedCateg != null) {
+	    	categ.addAttribute("selectedCateg", selectedCateg);
+	    	categ.addAttribute("mensajeExito", "Producto actualizado con éxito!");
+	    }
 		return "mantenimiento_producto_list";
 	}
 	
@@ -93,13 +98,25 @@ public class ProductoController {
 			return "mantenimiento_producto_editar";
 		}
 		
+		BigDecimal precompraprod = producto.getDetalleproducto().getPreccompra();
+		BigDecimal precventaprod = producto.getDetalleproducto().getPrecventa();	
+		
+
 		ProductoDTO productoExistente = new ProductoDTO();
 		productoExistente.setCodpro(producto.getCodpro());
 		productoExistente.setFecvenc(producto.getFecvenc());
 		productoExistente.setNomcateg(producto.getDetalleproducto().getNomcateg());
 		productoExistente.setNomprod(producto.getNomprod());
 		productoExistente.setNomprov(producto.getNomprov());
-		productoExistente.setPreccompra(producto.getDetalleproducto().getPreccompra());
+		// SI EL PRECIO DE COMPRA ES MAYOR AL DE VENTA
+		// Usar compareTo para comparar BigDecimal: un valor positivo si el primero es mayor que el segundo.
+		if (precompraprod.compareTo(precventaprod) > 0) {
+			BigDecimal compra = null;
+			compra = precventaprod.subtract(new BigDecimal("0.10"));
+			productoExistente.setPreccompra(compra);
+		} else {
+			productoExistente.setPreccompra(precompraprod);
+		}
 		productoExistente.setPrecventa(producto.getDetalleproducto().getPrecventa());
 		productoExistente.setStockcodigo(producto.getStockcodigo());
 		productoExistente.setStockminimo(producto.getDetalleproducto().getStockminimo());
@@ -108,7 +125,7 @@ public class ProductoController {
         proveed.addAttribute("proveedores", servProveedor.listarProveedores());
         categ.addAttribute("categorias", servCategoria.listarCategorias());
 		model.addAttribute("mensajeExito", "Producto actualizado con éxito!");
-		return "mantenimiento_producto_editar";
+		return "redirect:/mantenimiento/producto/lista?selectedCateg=" + producto.getDetalleproducto().getNomcateg();
 	}
 	
 	//ELIMINAR PRODUCTO POR CÓDGIO

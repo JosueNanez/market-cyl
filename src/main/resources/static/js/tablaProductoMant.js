@@ -123,36 +123,42 @@ async function buscar(inputElement, suggestionsId) {
 
 							const fila = document.createElement('tr');
 
+							const columna0 = document.createElement('th');
+							//columna1.scope = "row";
+							columna0.innerHTML = "-";
+							
 							const columna1 = document.createElement('th');
 							//columna1.scope = "row";
 							columna1.innerHTML = "-";
+							
 							const columna2 = document.createElement('td');
 							columna2.innerHTML = prod.nomprod;
+
 							const columna3 = document.createElement('td');
-							columna3.innerHTML = prod.stockminimo;
+							columna3.innerHTML = prod.preccompra.toFixed(2);
 							const columna4 = document.createElement('td');
-							columna4.innerHTML = "-";
+							columna4.innerHTML = prod.precventa.toFixed(2);
 							const columna5 = document.createElement('td');
-							columna5.innerHTML = prod.stockactual;
+							columna5.innerHTML = prod.ganancia.toFixed(2);							
 							const columna6 = document.createElement('td');
 							columna6.innerHTML = "-";
 							const columna7 = document.createElement('td');
-							columna7.innerHTML = prod.preccompra.toFixed(2);
+							columna7.innerHTML = prod.stockminimo;
 							const columna8 = document.createElement('td');
-							columna8.innerHTML = prod.precventa.toFixed(2);
+							columna8.innerHTML = "-";
 							const columna9 = document.createElement('td');
-							columna9.innerHTML = prod.ganancia.toFixed(2);
+							columna9.innerHTML = prod.stockactual;
 							const columna10 = document.createElement('td');
 							columna10.innerHTML = prod.nomcateg;
 							const columna11 = document.createElement('td');
 							columna11.innerHTML = "-";
-
 							const columna12 = document.createElement('td');
 							const botonEliminar = document.createElement('a');
 							botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
 							botonEliminar.href = `/mantenimiento/producto/eliminarFisico/${prod.nomprod}`;
 							columna12.appendChild(botonEliminar);
 
+							fila.appendChild(columna0);
 							fila.appendChild(columna1);
 							fila.appendChild(columna2);
 							fila.appendChild(columna3);
@@ -182,6 +188,11 @@ async function buscar(inputElement, suggestionsId) {
 				productos.slice(0, 10).forEach(prod => {
 
 					const fila = document.createElement('tr');
+					
+					const columna0 = document.createElement('th');
+					const enlaceEditar = document.createElement('a');
+					enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
+					enlaceEditar.href = `/mantenimiento/producto/editar/${prod.codpro}`;
 
 					const columna1 = document.createElement('th');
 					//columna1.scope = "row";
@@ -189,29 +200,24 @@ async function buscar(inputElement, suggestionsId) {
 					const columna2 = document.createElement('td');
 					columna2.innerHTML = prod.nomprod;
 					const columna3 = document.createElement('td');
-					columna3.innerHTML = prod.detalleproducto.stockminimo;
+					columna3.innerHTML = prod.detalleproducto.preccompra.toFixed(2);
 					const columna4 = document.createElement('td');
-					columna4.innerHTML = prod.stockcodigo;
+					columna4.innerHTML = prod.detalleproducto.precventa.toFixed(2);
 					const columna5 = document.createElement('td');
-					columna5.innerHTML = prod.detalleproducto.stockactual;
+					columna5.innerHTML = prod.detalleproducto.ganancia.toFixed(2);
 					const columna6 = document.createElement('td');
 					columna6.innerHTML = prod.fecvenc;
 					const columna7 = document.createElement('td');
-					columna7.innerHTML = prod.detalleproducto.preccompra.toFixed(2);
+					columna7.innerHTML = prod.detalleproducto.stockminimo;
 					const columna8 = document.createElement('td');
-					columna8.innerHTML = prod.detalleproducto.precventa.toFixed(2);
+					columna8.innerHTML = prod.stockcodigo;
 					const columna9 = document.createElement('td');
-					columna9.innerHTML = prod.detalleproducto.ganancia.toFixed(2);
+					columna9.innerHTML = prod.detalleproducto.stockactual;
 					const columna10 = document.createElement('td');
 					columna10.innerHTML = prod.detalleproducto.nomcateg;
 					const columna11 = document.createElement('td');
 					columna11.innerHTML = prod.nomprov;
-
 					const columna12 = document.createElement('td');
-					const enlaceEditar = document.createElement('a');
-					enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
-					enlaceEditar.href = `/mantenimiento/producto/editar/${prod.codpro}`;
-
 					const botonEliminar = document.createElement('button');
 					botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
 					//enlaceEditar.href = `/mantenimiento/producto/eliminar/${prod.codPRO}`;
@@ -230,12 +236,12 @@ async function buscar(inputElement, suggestionsId) {
 								window.location.href = `/mantenimiento/producto/eliminar/${encodeURIComponent(prod.codpro)}`;
 							}
 						});
-
-
 					};
-					columna12.appendChild(enlaceEditar);
+					
 					columna12.appendChild(botonEliminar);
 
+					columna0.appendChild(enlaceEditar);
+					fila.appendChild(columna0);
 					fila.appendChild(columna1);
 					fila.appendChild(columna2);
 					fila.appendChild(columna3);
@@ -281,9 +287,14 @@ document.getElementById('nomcateg').addEventListener('change', async function() 
 			//console.log('Lista de productos:', productos);
 
 			// Puedes iterar sobre la lista de productos si es necesario
-			productos.forEach(prod => {
+			productos.slice(0, 10).forEach(prod => {
 
 				const fila = document.createElement('tr');
+				
+				const columna0 = document.createElement('th');
+				const enlaceEditar = document.createElement('a');
+				enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
+				enlaceEditar.href = `/mantenimiento/producto/editar/${prod.codpro}`;
 
 				const columna1 = document.createElement('th');
 				//columna1.scope = "row";
@@ -291,29 +302,24 @@ document.getElementById('nomcateg').addEventListener('change', async function() 
 				const columna2 = document.createElement('td');
 				columna2.innerHTML = prod.nomprod;
 				const columna3 = document.createElement('td');
-				columna3.innerHTML = prod.detalleproducto.stockminimo;
+				columna3.innerHTML = prod.detalleproducto.preccompra.toFixed(2);
 				const columna4 = document.createElement('td');
-				columna4.innerHTML = prod.stockcodigo;
+				columna4.innerHTML = prod.detalleproducto.precventa.toFixed(2);
 				const columna5 = document.createElement('td');
-				columna5.innerHTML = prod.detalleproducto.stockactual;
+				columna5.innerHTML = prod.detalleproducto.ganancia.toFixed(2);
 				const columna6 = document.createElement('td');
 				columna6.innerHTML = prod.fecvenc;
 				const columna7 = document.createElement('td');
-				columna7.innerHTML = prod.detalleproducto.preccompra.toFixed(2);
+				columna7.innerHTML = prod.detalleproducto.stockminimo;
 				const columna8 = document.createElement('td');
-				columna8.innerHTML = prod.detalleproducto.precventa.toFixed(2);
+				columna8.innerHTML = prod.stockcodigo;
 				const columna9 = document.createElement('td');
-				columna9.innerHTML = prod.detalleproducto.ganancia.toFixed(2);
+				columna9.innerHTML = prod.detalleproducto.stockactual;
 				const columna10 = document.createElement('td');
 				columna10.innerHTML = prod.detalleproducto.nomcateg;
 				const columna11 = document.createElement('td');
 				columna11.innerHTML = prod.nomprov;
-
 				const columna12 = document.createElement('td');
-				const enlaceEditar = document.createElement('a');
-				enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
-				enlaceEditar.href = `/mantenimiento/producto/editar/${prod.codpro}`;
-
 				const botonEliminar = document.createElement('button');
 				botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
 				//enlaceEditar.href = `/mantenimiento/producto/eliminar/${prod.codPRO}`;
@@ -332,12 +338,12 @@ document.getElementById('nomcateg').addEventListener('change', async function() 
 							window.location.href = `/mantenimiento/producto/eliminar/${encodeURIComponent(prod.codpro)}`;
 						}
 					});
-
-
 				};
-				columna12.appendChild(enlaceEditar);
+				
 				columna12.appendChild(botonEliminar);
 
+				columna0.appendChild(enlaceEditar);
+				fila.appendChild(columna0);
 				fila.appendChild(columna1);
 				fila.appendChild(columna2);
 				fila.appendChild(columna3);
@@ -351,8 +357,6 @@ document.getElementById('nomcateg').addEventListener('change', async function() 
 				fila.appendChild(columna11);
 				fila.appendChild(columna12);
 				sugerencias.appendChild(fila);
-
-
 
 			});
 		} catch (error) {
