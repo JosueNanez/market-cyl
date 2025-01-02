@@ -10,13 +10,17 @@ let endX = 0, endY = 0;     // Posición final del arrastre
 
 document.addEventListener('DOMContentLoaded', () => {
 	const carouselSlide = document.getElementById('DeslizaCarrusel');
-
+	
 	
 	// Mostrar el segundo slide inmediatamente
 	const offset = -currentIndex * 100;
 	carouselSlide.style.transform = `translateX(${offset}%)`;
-	carouselSlide.style.transition = 'none'; // Sin transición para aplicar directamente
+	//carouselSlide.style.transition = 'none'; // Sin transición para aplicar directamente
 
+	//Autofocus para el input buscador luego de la transición
+	const inputbuscador = document.getElementById('buscadorProducto');
+	inputbuscador.focus();
+	
 	// Habilitar la transición suave después de un breve tiempo
 	setTimeout(() => {
 		carouselSlide.style.transition = 'transform 0.5s ease';
