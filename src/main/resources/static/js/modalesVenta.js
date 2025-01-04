@@ -6,42 +6,6 @@ let savedClients = {};
 
 
 
-// Función para solicitar acceso a la cámara y luego apagarla
-/*
-async function requestCameraAccess() {
-	let stream;
-	try {
-		// Solicitamos acceso a la cámara sin hacer nada con el stream
-		stream = await navigator.mediaDevices.getUserMedia({ video: true });
-
-		// Si se concede el acceso, mostramos un mensaje
-		console.log('Acceso a la cámara concedido.');
-
-		stream.getTracks().forEach(track => track.stop());
-		console.log('Cámara apagada después de 2 milisegundos.');
-
-		
-		setTimeout(() => {
-			// Detener todos los tracks del stream (apaga la cámara)
-			stream.getTracks().forEach(track => track.stop());
-			console.log('Cámara apagada después de 2 milisegundos.');
-		}, 2); // 2 milisegundos
-	} catch (err) {
-		// Si ocurre un error (como no conceder permisos), mostramos un mensaje
-		console.error('Error al acceder a la cámara:', err);
-		alert('No se pudo acceder a la cámara. Asegúrate de que el navegador tenga permisos.');
-	}
-}
-
-// Función que se ejecuta cuando el documento está completamente cargado
-document.addEventListener('DOMContentLoaded', () => {
-	// Llamamos a la función de acceso a la cámara al cargar la página
-	requestCameraAccess();
-});*/
-
-
-
-
 // AL INICIAR
 document.addEventListener('DOMContentLoaded', async () => {
 	const contenedorListado = document.getElementById("listadoAccesos");
@@ -96,6 +60,7 @@ async function abrirModal(categoria) {
 
 				let cantidad = 0;
 				const { value: cant } = await Swal.fire({
+					position: "top",
 					title: prod.nomprod,
 					html: `
 				        <div style="display: flex; justify-content: space-between; font-size: 1rem; margin-bottom: 10px;">
@@ -328,6 +293,7 @@ async function buscar(inputElement, suggestionsId) {
 					boton.onclick = async () => {
 						let cantidad = 0;
 						const { value: cant } = await Swal.fire({
+							position: "top",
 							title: `<a type="button" class="btn btn-outline-dark btn-lg" onclick="actualizaPrecio('${prod.nomprod}', '${prod.preccompra}', '${prod.precventa}')">${(prod.nomprod)}</a>`,
 
 							//title: prod.nomprod,
@@ -417,18 +383,20 @@ async function actualizaPrecio(nombre, preciocompra, precioventa) {
 	const venta = parseFloat(precioventa) || 0;
 
 	const { value: formValues } = await Swal.fire({
+		position: "top",
 		title: nombre, // Mostrar el nombre del producto
 		html: `
             <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                <label style="font-weight: bold; margin-bottom: 5px;">COMPRA</label>
-                <input id="precioCompra" type="number" class="swal2-input" 
-                       style="width: auto;" step="0.001" min="0" 
-                       value="${compra.toFixed(2)}">
 
-                <label style="font-weight: bold; margin-top: 15px; margin-bottom: 5px;">VENTA</label>
+                <label style="font-weight: bold; margin-top: 15px; margin-bottom: 5px;">PRECIO VENTA</label>
                 <input id="precioVenta" type="number" class="swal2-input" 
                        style="width: auto;" step="0.001" min="0" 
                        value="${venta.toFixed(2)}">
+				<br>
+				<label style="font-weight: bold; margin-bottom: 5px;">PRECIO COMPRA</label>
+				<input id="precioCompra" type="number" class="swal2-input" 
+					   style="width: auto;" step="0.001" min="0" 
+					   value="${compra.toFixed(2)}">
             </div>
         `,
 		focusConfirm: false,
@@ -448,9 +416,17 @@ async function actualizaPrecio(nombre, preciocompra, precioventa) {
 
 	if (formValues) {
 		const { compra, venta } = formValues;
+		
+		//Si el precio de compra es mayor al de venta
+		let precCompra = 0.00;
+		if (compra >= venta){
+			precCompra = venta - 0.10;
+		} else { 
+			precCompra = compra;
+		}
 
 		try {
-			const response = await fetch(`/mantenimiento/producto/actualizarPrecios?` + new URLSearchParams({ nomprod: nombre, preccompra: compra, precventa: venta }));
+			const response = await fetch(`/mantenimiento/producto/actualizarPrecios?` + new URLSearchParams({ nomprod: nombre, preccompra: precCompra, precventa: venta }));
 			if (!response.ok) {
 				Swal.fire({
 					icon: "error",
@@ -463,7 +439,7 @@ async function actualizaPrecio(nombre, preciocompra, precioventa) {
 
 				await Swal.fire({
 					title: "Precio Actualizado",
-					text: `Nuevo precio de compra: ${compra.toFixed(2)}, venta: ${venta.toFixed(2)}`,
+					text: `Nuevo precio de venta: ${venta.toFixed(2)}, compra: ${precCompra.toFixed(2)}`,
 					icon: "success",
 					timer: 1000,
 					showConfirmButton: false
@@ -475,6 +451,7 @@ async function actualizaPrecio(nombre, preciocompra, precioventa) {
 		}
 	}
 }
+
 
 
 
@@ -659,6 +636,7 @@ async function fetchProductos(contenedorListado) {
 			boton.onclick = async () => {
 				let cantidad = 0;
 				const { value: cant } = await Swal.fire({
+					position: "top",
 					title: prod.nomprod,
 					html: ` 
                         <div style="display: flex; justify-content: space-between; font-size: 1rem; margin-bottom: 10px;">

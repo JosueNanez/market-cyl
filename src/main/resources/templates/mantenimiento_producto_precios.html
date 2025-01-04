@@ -54,37 +54,38 @@
 
 	<div class="gap-1 col-11 ms-3 me-3" id="barraFiltros">
 		<div class="text-center my-4">
-			<h2>Consulta Productos</h2>
+			<h2>Mantenimiento Precios</h2>
 		</div>
 		<div class="row" style="display: flex;">
 			<div class="col-5 col-sm-5 col-md-5 col-lg-3 mb-4">
 				<input type="text" id="buscadorProducto" autofocus class="form-control" placeholder="🔎 Buscar"
-					oninput="buscar(this, 'registrosFiltrados')">
+					oninput="buscarPrecios(this, 'registrosFiltrados')">
 				<div class="dropdown">
 					<ul id="suggestions-1" class="dropdown-menu"></ul>
 				</div>
 			</div>
 
 			<div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4">
-				<select class="form-select" id="nomcateg" name="nomcateg" >
+				<select class="form-select" id="nomcategPrecios" name="nomcateg">
 					<option value="" th:selected="${selectedCateg == null}" selected>Categorias</option>
 					<option th:each="categoria : ${categorias}" th:value="${categoria.nomcateg}"
-						th:text="${categoria.nomcateg}" th:selected="${selectedCateg == categoria.nomcateg}">Categoría</option>
+						th:text="${categoria.nomcateg}" th:selected="${selectedCateg == categoria.nomcateg}">Categoría
+					</option>
 				</select>
 			</div>
 			<script>
-			    // Generar el script condicionalmente
-			    /*[[${selectedCateg != null}]]*/
-			    if ('[[${selectedCateg}]]' !== '' && '[[${selectedCateg}]]' !== null) {
-			        document.addEventListener('DOMContentLoaded', function () {
-			            const select = document.getElementById('nomcateg');
-			            if (select) {
-			                select.dispatchEvent(new Event('change'));
-			            }
-			        });
-			    }
+				// Generar el script condicionalmente
+				/*[[${selectedCateg != null}]]*/
+				if ('[[${selectedCateg}]]' !== '' && '[[${selectedCateg}]]' !== null) {
+					document.addEventListener('DOMContentLoaded', function () {
+						const select = document.getElementById('nomcateg');
+						if (select) {
+							select.dispatchEvent(new Event('change'));
+						}
+					});
+				}
 			</script>
-			
+
 		</div>
 	</div>
 
@@ -95,23 +96,10 @@
 					<thead class="table-success">
 						<tr>
 							<th scope="col"></th>
-							<th scope="col">CODIGO</th>
 							<th scope="col">NOMBRE</th>
-							
-							<th scope="col">COMPR</th>
 							<th scope="col">VENTA</th>
+							<th scope="col">COMPR</th>
 							<th scope="col">GANAN</th>
-							
-
-							<th scope="col">VENCIMIENTO</th>
-							
-							<th scope="col">MIN</th>
-							<th scope="col">CANT</th>
-							<th scope="col">TOTAL</th>
-							
-							<th scope="col">CATEGORIA</th>
-							<th scope="col">PROVEEDOR</th>
-							<th scope="col">ACCIÓN</th>
 						</tr>
 					</thead>
 					<tbody id="registrosFiltrados">
@@ -121,8 +109,6 @@
 			</div>
 		</div>
 	</div>
-
-
 
 
 

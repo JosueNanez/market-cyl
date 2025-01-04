@@ -38,7 +38,7 @@ public class ProductoController {
 	
 	@Autowired
 	private CategoriaService servCategoria;
-	
+
 	
 	//CONSULTA HTML
 	@GetMapping("/lista")
@@ -53,6 +53,13 @@ public class ProductoController {
 		return "mantenimiento_producto_list";
 	}
 	
+	//MANTENIMIENTO PRECIOS HTML
+	@GetMapping("/listaPrecios")
+	public String listaPrecios(Model proveed, Model categ) {
+	    proveed.addAttribute("proveedores", servProveedor.listarProveedores());
+	    categ.addAttribute("categorias", servCategoria.listarCategorias());
+		return "mantenimiento_producto_precios";
+	}
 	
 	//REGISTRAR
 	@GetMapping("/registro")
@@ -180,6 +187,13 @@ public class ProductoController {
 		return servicio.BusquedaDimanProductoMante(param);
 	}
 	
+	@GetMapping("/prodporcategoriaMantePrecio")
+	@ResponseBody
+	public List<DetalleProducto> detalleporcategoriaMantePrecio(@RequestParam() String nomcateg){
+		return servicio.listaProductosPorCategoria(nomcateg);
+	}
+	
+	
 	@GetMapping("/prodporcategoria")
 	@ResponseBody
 	public List<Producto> productosporCategoria(@RequestParam() String nomcateg){
@@ -212,6 +226,13 @@ public class ProductoController {
         }
     }
 	
+	
+	//Endpoints para formulario mantenimiento precios
+	@GetMapping("/busquedaPrecios")
+	@ResponseBody
+	public List<DetalleProducto> obtenerSugerencias(@RequestParam() String param) {
+		return servicio.SPBusquedaDimanProducto(param);
+	}
 	
 	
 
