@@ -28,5 +28,9 @@ public interface DetalleProductoRepository  extends JpaRepository<DetalleProduct
     @Query("UPDATE DetalleProducto d SET d.preccompra = :preccompra, d.precventa = :precventa, d.ganancia = :precventa - :preccompra WHERE d.nomprod = :nomprod")
     int actualizarPreciosPorNombre(String nomprod, BigDecimal preccompra, BigDecimal precventa);
 	
+	@Modifying
+    @Transactional
+    @Query("UPDATE DetalleProducto dp SET dp.nomprod = :nuevoNomprod WHERE dp.nomprod = :antiguoNomprod")
+    void actualizarNomprodEnDetalleProducto(String antiguoNomprod, String nuevoNomprod);
 
 }

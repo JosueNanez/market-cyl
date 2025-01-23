@@ -66,25 +66,27 @@
 			</div>
 
 			<div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4">
-				<select class="form-select" id="nomcateg" name="nomcateg" >
+				<select class="form-select" id="nomcateg" name="nomcateg">
 					<option value="" th:selected="${selectedCateg == null}" selected>Categorias</option>
 					<option th:each="categoria : ${categorias}" th:value="${categoria.nomcateg}"
-						th:text="${categoria.nomcateg}" th:selected="${selectedCateg == categoria.nomcateg}">Categoría</option>
+						th:text="${categoria.nomcateg}" th:selected="${selectedCateg == categoria.nomcateg}">Categoría
+					</option>
 				</select>
 			</div>
 			<script>
-			    // Generar el script condicionalmente
-			    /*[[${selectedCateg != null}]]*/
-			    if ('[[${selectedCateg}]]' !== '' && '[[${selectedCateg}]]' !== null) {
-			        document.addEventListener('DOMContentLoaded', function () {
-			            const select = document.getElementById('nomcateg');
-			            if (select) {
-			                select.dispatchEvent(new Event('change'));
-			            }
-			        });
-			    }
+				// Generar el script condicionalmente
+				/*[[${selectedCateg != null}]]*/
+				if ('[[${selectedCateg}]]' !== '' && '[[${selectedCateg}]]' !== null) {
+					document.addEventListener('DOMContentLoaded', function () {
+						const select = document.getElementById('nomcateg');
+						if (select) {
+							select.dispatchEvent(new Event('change'));
+						}
+					});
+				}
+				
 			</script>
-			
+
 		</div>
 	</div>
 
@@ -94,22 +96,11 @@
 				<table class="table table-bordered" style="min-width: max-content; table-layout: auto;">
 					<thead class="table-success">
 						<tr>
-							<th scope="col"></th>
 							<th scope="col">CODIGO</th>
 							<th scope="col">NOMBRE</th>
-							
-							<th scope="col">COMPR</th>
 							<th scope="col">VENTA</th>
-							<th scope="col">GANAN</th>
-							
-
 							<th scope="col">VENCIMIENTO</th>
-							
-							<th scope="col">MIN</th>
 							<th scope="col">CANT</th>
-							<th scope="col">TOTAL</th>
-							
-							<th scope="col">CATEGORIA</th>
 							<th scope="col">PROVEEDOR</th>
 							<th scope="col">ACCIÓN</th>
 						</tr>

@@ -190,34 +190,62 @@ async function buscar(inputElement, suggestionsId) {
 					const fila = document.createElement('tr');
 
 					const columna0 = document.createElement('th');
-					const enlaceEditar = document.createElement('a');
-					enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
-					enlaceEditar.href = `/mantenimiento/producto/editar/${prod.codpro}`;
+					//columna0.scope = "row";
+					const enlaceEditarCod = document.createElement('a');
+					enlaceEditarCod.className = "btn btn-light fa-solid fa-pen-to-square";
+					enlaceEditarCod.onclick = () => actualizarCodigo(prod.codpro, prod.nomprod);
 
-					const columna1 = document.createElement('th');
-					//columna1.scope = "row";
-					columna1.innerHTML = prod.codpro;
+					// Crear un contenedor flex
+					const contenedor = document.createElement('div');
+					contenedor.style.display = "flex";
+					contenedor.style.justifyContent = "space-between";
+					contenedor.style.alignItems = "center";
+
+					// Añadir el código y el enlace al contenedor
+					const textoCodpro = document.createElement('span');
+					textoCodpro.textContent = prod.codpro + "  ";
+					contenedor.appendChild(textoCodpro);
+					contenedor.appendChild(enlaceEditarCod);
+
+					// Insertar el contenedor en la celda
+					columna0.innerHTML = ""; // Limpiar cualquier contenido anterior
+					columna0.appendChild(contenedor);
+
+
+
+					const columna1 = document.createElement('td');
+					const enlaceEditarNom = document.createElement('a');
+					enlaceEditarNom.className = "btn btn-light fa-solid fa-pen-to-square";
+					enlaceEditarNom.onclick = () => actualizarNombre(prod.nomprod);
+					// Crear un contenedor flex
+					const contenedorNom = document.createElement('div');
+					contenedorNom.style.display = "flex";
+					contenedorNom.style.justifyContent = "space-between";
+					contenedorNom.style.alignItems = "center";
+
+					// Añadir el código y el enlace al contenedor
+					const textoNompro = document.createElement('span');
+					textoNompro.textContent = prod.nomprod + "  ";
+					contenedorNom.appendChild(textoNompro);
+					contenedorNom.appendChild(enlaceEditarNom);
+
+					columna1.innerHTML = ""; // Limpiar cualquier contenido anterior
+					columna1.appendChild(contenedorNom);
+
+
 					const columna2 = document.createElement('td');
-					columna2.innerHTML = prod.nomprod;
+					columna2.innerHTML = prod.detalleproducto.precventa.toFixed(2);
+
 					const columna3 = document.createElement('td');
-					columna3.innerHTML = prod.detalleproducto.preccompra.toFixed(2);
+					columna3.innerHTML = prod.fecvenc;
+
 					const columna4 = document.createElement('td');
-					columna4.innerHTML = prod.detalleproducto.precventa.toFixed(2);
+					columna4.innerHTML = prod.stockcodigo;
+
 					const columna5 = document.createElement('td');
-					columna5.innerHTML = prod.detalleproducto.ganancia.toFixed(2);
+					columna5.innerHTML = prod.nomprov;
+
 					const columna6 = document.createElement('td');
-					columna6.innerHTML = prod.fecvenc;
-					const columna7 = document.createElement('td');
-					columna7.innerHTML = prod.detalleproducto.stockminimo;
-					const columna8 = document.createElement('td');
-					columna8.innerHTML = prod.stockcodigo;
-					const columna9 = document.createElement('td');
-					columna9.innerHTML = prod.detalleproducto.stockactual;
-					const columna10 = document.createElement('td');
-					columna10.innerHTML = prod.detalleproducto.nomcateg;
-					const columna11 = document.createElement('td');
-					columna11.innerHTML = prod.nomprov;
-					const columna12 = document.createElement('td');
 					const botonEliminar = document.createElement('button');
 					botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
 					//enlaceEditar.href = `/mantenimiento/producto/eliminar/${prod.codPRO}`;
@@ -237,10 +265,14 @@ async function buscar(inputElement, suggestionsId) {
 							}
 						});
 					};
+					const enlaceEditar = document.createElement('a');
+					enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
+					enlaceEditar.href = `/mantenimiento/producto/editar/${prod.codpro}`;
 
-					columna12.appendChild(botonEliminar);
+					columna6.appendChild(enlaceEditar);
+					columna6.appendChild(botonEliminar);
 
-					columna0.appendChild(enlaceEditar);
+
 					fila.appendChild(columna0);
 					fila.appendChild(columna1);
 					fila.appendChild(columna2);
@@ -248,12 +280,6 @@ async function buscar(inputElement, suggestionsId) {
 					fila.appendChild(columna4);
 					fila.appendChild(columna5);
 					fila.appendChild(columna6);
-					fila.appendChild(columna7);
-					fila.appendChild(columna8);
-					fila.appendChild(columna9);
-					fila.appendChild(columna10);
-					fila.appendChild(columna11);
-					fila.appendChild(columna12);
 					sugerencias.appendChild(fila);
 
 				});
@@ -271,7 +297,7 @@ async function buscar(inputElement, suggestionsId) {
 // Detectar el cambio en el valor del select
 
 const selectCategoria = document.getElementById('nomcateg');
-if (selectCategoria){
+if (selectCategoria) {
 	selectCategoria.addEventListener('change', async function() {
 		const selectedValue = this.value; // Obtiene el valor seleccionado
 		const sugerencias = document.getElementById("registrosFiltrados");
@@ -295,34 +321,62 @@ if (selectCategoria){
 					const fila = document.createElement('tr');
 
 					const columna0 = document.createElement('th');
-					const enlaceEditar = document.createElement('a');
-					enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
-					enlaceEditar.href = `/mantenimiento/producto/editar/${prod.codpro}`;
+					//columna0.scope = "row";
+					const enlaceEditarCod = document.createElement('a');
+					enlaceEditarCod.className = "btn btn-light fa-solid fa-pen-to-square";
+					enlaceEditarCod.onclick = () => actualizarCodigo(prod.codpro, prod.nomprod);
 
-					const columna1 = document.createElement('th');
-					//columna1.scope = "row";
-					columna1.innerHTML = prod.codpro;
+					// Crear un contenedor flex
+					const contenedor = document.createElement('div');
+					contenedor.style.display = "flex";
+					contenedor.style.justifyContent = "space-between";
+					contenedor.style.alignItems = "center";
+
+					// Añadir el código y el enlace al contenedor
+					const textoCodpro = document.createElement('span');
+					textoCodpro.textContent = prod.codpro + "  ";
+					contenedor.appendChild(textoCodpro);
+					contenedor.appendChild(enlaceEditarCod);
+
+					// Insertar el contenedor en la celda
+					columna0.innerHTML = ""; // Limpiar cualquier contenido anterior
+					columna0.appendChild(contenedor);
+
+
+
+					const columna1 = document.createElement('td');
+					const enlaceEditarNom = document.createElement('a');
+					enlaceEditarNom.className = "btn btn-light fa-solid fa-pen-to-square";
+					enlaceEditarNom.onclick = () => actualizarNombre(prod.nomprod);
+					// Crear un contenedor flex
+					const contenedorNom = document.createElement('div');
+					contenedorNom.style.display = "flex";
+					contenedorNom.style.justifyContent = "space-between";
+					contenedorNom.style.alignItems = "center";
+
+					// Añadir el código y el enlace al contenedor
+					const textoNompro = document.createElement('span');
+					textoNompro.textContent = prod.nomprod + "  ";
+					contenedorNom.appendChild(textoNompro);
+					contenedorNom.appendChild(enlaceEditarNom);
+
+					columna1.innerHTML = ""; // Limpiar cualquier contenido anterior
+					columna1.appendChild(contenedorNom);
+
+
 					const columna2 = document.createElement('td');
-					columna2.innerHTML = prod.nomprod;
+					columna2.innerHTML = prod.detalleproducto.precventa.toFixed(2);
+
 					const columna3 = document.createElement('td');
-					columna3.innerHTML = prod.detalleproducto.preccompra.toFixed(2);
+					columna3.innerHTML = prod.fecvenc;
+
 					const columna4 = document.createElement('td');
-					columna4.innerHTML = prod.detalleproducto.precventa.toFixed(2);
+					columna4.innerHTML = prod.stockcodigo;
+
 					const columna5 = document.createElement('td');
-					columna5.innerHTML = prod.detalleproducto.ganancia.toFixed(2);
+					columna5.innerHTML = prod.nomprov;
+
 					const columna6 = document.createElement('td');
-					columna6.innerHTML = prod.fecvenc;
-					const columna7 = document.createElement('td');
-					columna7.innerHTML = prod.detalleproducto.stockminimo;
-					const columna8 = document.createElement('td');
-					columna8.innerHTML = prod.stockcodigo;
-					const columna9 = document.createElement('td');
-					columna9.innerHTML = prod.detalleproducto.stockactual;
-					const columna10 = document.createElement('td');
-					columna10.innerHTML = prod.detalleproducto.nomcateg;
-					const columna11 = document.createElement('td');
-					columna11.innerHTML = prod.nomprov;
-					const columna12 = document.createElement('td');
 					const botonEliminar = document.createElement('button');
 					botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
 					//enlaceEditar.href = `/mantenimiento/producto/eliminar/${prod.codPRO}`;
@@ -342,10 +396,14 @@ if (selectCategoria){
 							}
 						});
 					};
+					const enlaceEditar = document.createElement('a');
+					enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
+					enlaceEditar.href = `/mantenimiento/producto/editar/${prod.codpro}`;
 
-					columna12.appendChild(botonEliminar);
+					columna6.appendChild(enlaceEditar);
+					columna6.appendChild(botonEliminar);
 
-					columna0.appendChild(enlaceEditar);
+
 					fila.appendChild(columna0);
 					fila.appendChild(columna1);
 					fila.appendChild(columna2);
@@ -353,12 +411,6 @@ if (selectCategoria){
 					fila.appendChild(columna4);
 					fila.appendChild(columna5);
 					fila.appendChild(columna6);
-					fila.appendChild(columna7);
-					fila.appendChild(columna8);
-					fila.appendChild(columna9);
-					fila.appendChild(columna10);
-					fila.appendChild(columna11);
-					fila.appendChild(columna12);
 					sugerencias.appendChild(fila);
 
 				});
@@ -366,11 +418,154 @@ if (selectCategoria){
 				console.error("Error al buscar productos:", error);
 			}
 		} else {
-			alert('No se ha seleccionado ninguna categoría.');
+			//alert('No se ha seleccionado ninguna categoría.');
 		}
 	});
-	
+
 }
+
+async function actualizarCodigo(codigoActual, nombre) {
+	// Convertir valores a números
+
+	const { value: formValues } = await Swal.fire({
+		position: "top",
+		title: nombre, // Mostrar el nombre del producto
+		html: `
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+			
+                <label style="font-weight: bold; margin-top: 15px; margin-bottom: 5px;">CÓDIGO</label>
+                <input id="nuevoCodigo" type="text" class="swal2-input" 
+                       style="width: auto;"
+                       value="${codigoActual}">
+            </div>
+        `,
+		focusConfirm: false,
+		confirmButtonText: "Actualizar", // Botón de confirmar
+		showCancelButton: true, // Mostrar botón de cancelar
+		cancelButtonText: "Cancelar",
+		preConfirm: () => {
+			const codigoN = parseInt(document.getElementById('nuevoCodigo').value, 10);
+			if (isNaN(codigoN) || codigoN <= 0) {
+				Swal.showValidationMessage("El código debe ser positivo.");
+				return null;
+			}
+			return { codigoN };
+		}
+	});
+
+	if (formValues) {
+		const { codigoN } = formValues;
+
+		try {
+			const response = await fetch(`/mantenimiento/producto/actualizarCodigo?` + new URLSearchParams({ codactual: codigoActual, nuevocodigo: codigoN }));
+			if (!response.ok) {
+				Swal.fire({
+					icon: "error",
+					title: "Código no actualizado!",
+					timer: 2000
+				});
+				throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+
+			} else {
+
+				if (selectCategoria) {
+					selectCategoria.dispatchEvent(new Event('change'));
+				}
+
+				await Swal.fire({
+					title: "Código Actualizado",
+					icon: "success",
+					timer: 1000,
+					showConfirmButton: false
+				});
+			}
+		} catch (error) {
+			console.error("Error al actualizar Productos...", error);
+		}
+	}
+}
+
+async function actualizarNombre(nombre) {
+
+	const { value: formValues } = await Swal.fire({
+		position: "top",
+		title: "NUEVO NOMBRE", // Mostrar el nombre del producto
+		html: `
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+			
+                <input id="nuevoNombre" type="text" class="swal2-input" 
+                       style="width: auto;"
+                       value="${nombre}">
+            </div>
+        `,
+		focusConfirm: false,
+		confirmButtonText: "Actualizar", // Botón de confirmar
+		showCancelButton: true, // Mostrar botón de cancelar
+		cancelButtonText: "Cancelar",
+		preConfirm: () => {
+			const nuevoNombre = document.getElementById('nuevoNombre').value;
+			// Validación de caracteres prohibidos y longitud
+			const caracteresProhibidos = /[<>@|$#]/;
+			if (caracteresProhibidos.test(nuevoNombre)) {
+				Swal.showValidationMessage("El nombre no debe incluir los caracteres < > @ | $ #.");
+				return null;
+			}
+
+			if (nuevoNombre.length > 20) {
+				Swal.showValidationMessage("El nombre no debe superar los 20 caracteres.");
+				return null;
+			}
+
+			if (nuevoNombre.trim() === "") {
+				Swal.showValidationMessage("El nombre no puede estar vacío.");
+				return null;
+			}
+
+			// Si pasa todas las validaciones, retorna el nombre
+			return { nuevoNombre };
+		}
+	});
+
+	if (formValues) {
+		const { nuevoNombre } = formValues;
+
+		try {
+			const response = await fetch(`/mantenimiento/producto/actualizarNomProducto?` + new URLSearchParams({ antiguonomprod: nombre, nuevonomprod: nuevoNombre }));
+			if (!response.ok) {
+				Swal.fire({
+					icon: "error",
+					title: "Nombre no actualizado!",
+					timer: 2000
+				});
+				throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+
+			} else {
+
+				if (selectCategoria) {
+					selectCategoria.dispatchEvent(new Event('change'));
+				}
+
+				//Verifica si el campo input tiene valor
+				const buscador = document.getElementById('buscadorProducto');
+				if (buscador && buscador.value.trim() !== '') {
+					// Lanza un evento `input` automáticamente si tiene un valor
+					buscador.dispatchEvent(new Event('input'));
+				}
+
+				await Swal.fire({
+					title: "Nombre Actualizado",
+					icon: "success",
+					timer: 1000,
+					showConfirmButton: false
+				});
+			}
+		} catch (error) {
+			console.error("Error al actualizar Productos...", error);
+		}
+	}
+}
+
+
 
 
 
@@ -395,7 +590,7 @@ if (selectCategoria){
 // FUNCIONES PARA FORMULARIO DE PRECIOS
 
 
-
+const selectCategoriaPrecios = document.getElementById('nomcategPrecios');  //Se ejecuta solo y cuando exista en el documento
 let debounTimer; // Variable para rastrear el temporizador
 async function buscarPrecios(inputElement, suggestionsId) {
 	const query = inputElement.value.trim();
@@ -453,6 +648,47 @@ async function buscarPrecios(inputElement, suggestionsId) {
 					const columna4 = document.createElement('td');
 					columna4.innerHTML = prod.ganancia.toFixed(2);
 
+					const columna5 = document.createElement('td');
+					const botonEliminar = document.createElement('a');
+					botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
+					botonEliminar.onclick = () => {
+						Swal.fire({
+							title: "Eliminar " + prod.nomprod + "  Definitivamente?",
+							text: "",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#3085d6",
+							cancelButtonColor: "#d33",
+							confirmButtonText: "Si, eliminar!"
+						}).then(async (result) => {
+							if (result.isConfirmed) {
+								//window.location.href = `/mantenimiento/producto/eliminarAccRap/${encodeURIComponent(prod.nomprod)}`;
+								const response = await fetch(`/mantenimiento/producto/eliminarAccRap?` + new URLSearchParams({ nombre: prod.nomprod }));
+								if (!response.ok) {
+									Swal.fire({
+										icon: "error",
+										title: "Producto no eliminado!",
+										timer: 2000
+									});
+									throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+
+								} else {
+
+									if (selectCategoriaPrecios) {
+										selectCategoriaPrecios.dispatchEvent(new Event('change'));
+									}
+
+									await Swal.fire({
+										title: "Producto Eliminado",
+										icon: "success",
+										timer: 1000,
+										showConfirmButton: false
+									});
+								}
+							}
+						});
+					};
+					columna5.appendChild(botonEliminar);
 
 					columna0.appendChild(enlaceEditar);
 					fila.appendChild(columna0);
@@ -460,6 +696,7 @@ async function buscarPrecios(inputElement, suggestionsId) {
 					fila.appendChild(columna2);
 					fila.appendChild(columna3);
 					fila.appendChild(columna4);
+					fila.appendChild(columna5);
 					sugerencias.appendChild(fila);
 
 				});
@@ -473,7 +710,7 @@ async function buscarPrecios(inputElement, suggestionsId) {
 
 
 
-const selectCategoriaPrecios = document.getElementById('nomcategPrecios');  //Se ejecuta solo y cuando exista en el documento
+
 if (selectCategoriaPrecios) {
 	selectCategoriaPrecios.addEventListener('change', async function() {
 		const selectedValue = this.value; // Obtiene el valor seleccionado
@@ -515,6 +752,48 @@ if (selectCategoriaPrecios) {
 					const columna4 = document.createElement('td');
 					columna4.innerHTML = prod.ganancia.toFixed(2);
 
+					const columna5 = document.createElement('td');
+					const botonEliminar = document.createElement('a');
+					botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
+					botonEliminar.onclick = () => {
+						Swal.fire({
+							title: "Eliminar " + prod.nomprod + "  Definitivamente?",
+							text: "",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#3085d6",
+							cancelButtonColor: "#d33",
+							confirmButtonText: "Si, eliminar!"
+						}).then(async (result) => {
+							if (result.isConfirmed) {
+								//window.location.href = `/mantenimiento/producto/eliminarAccRap/${encodeURIComponent(prod.nomprod)}`;
+								const response = await fetch(`/mantenimiento/producto/eliminarAccRap?` + new URLSearchParams({ nombre: prod.nomprod }));
+								if (!response.ok) {
+									Swal.fire({
+										icon: "error",
+										title: "Producto no eliminado!",
+										timer: 2000
+									});
+									throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+
+								} else {
+
+									if (selectCategoriaPrecios) {
+										selectCategoriaPrecios.dispatchEvent(new Event('change'));
+									}
+
+									await Swal.fire({
+										title: "Producto Eliminado",
+										icon: "success",
+										timer: 1000,
+										showConfirmButton: false
+									});
+								}
+							}
+						});
+
+					};
+					columna5.appendChild(botonEliminar);
 
 					columna0.appendChild(enlaceEditar);
 					fila.appendChild(columna0);
@@ -522,6 +801,7 @@ if (selectCategoriaPrecios) {
 					fila.appendChild(columna2);
 					fila.appendChild(columna3);
 					fila.appendChild(columna4);
+					fila.appendChild(columna5);
 					sugerencias.appendChild(fila);
 
 				});
@@ -529,10 +809,10 @@ if (selectCategoriaPrecios) {
 				console.error("Error al buscar productos:", error);
 			}
 		} else {
-			alert('No se ha seleccionado ninguna categoría.');
+			//alert('No se ha seleccionado ninguna categoría.');
 		}
 	});
-	
+
 }
 
 
@@ -577,12 +857,12 @@ async function actualizarPrecio(nombre, preciocompra, precioventa) {
 
 	if (formValues) {
 		const { compra, venta } = formValues;
-		
+
 		//Si el precio de compra es mayor al de venta
 		let precCompra = 0.00;
-		if (compra >= venta){
+		if (compra >= venta) {
 			precCompra = venta - 0.10;
-		} else { 
+		} else {
 			precCompra = compra;
 		}
 
@@ -597,9 +877,15 @@ async function actualizarPrecio(nombre, preciocompra, precioventa) {
 				throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
 
 			} else {
-				
+
 				if (selectCategoriaPrecios) {
 					selectCategoriaPrecios.dispatchEvent(new Event('change'));
+				}				
+				//Verifica si el campo input tiene valor
+				const buscador = document.getElementById('buscadorProducto');
+				if (buscador && buscador.value.trim() !== '') {
+					// Lanza un evento `input` automáticamente si tiene un valor
+					buscador.dispatchEvent(new Event('input'));
 				}
 
 				await Swal.fire({
@@ -609,7 +895,6 @@ async function actualizarPrecio(nombre, preciocompra, precioventa) {
 					timer: 1000,
 					showConfirmButton: false
 				});
-
 			}
 		} catch (error) {
 			console.error("Error al buscar Productos...", error);
