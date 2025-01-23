@@ -138,7 +138,8 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public void actualizarNomprod(String antiguoNomprod, String nuevoNomprod) {
 		detalleRepository.actualizarNomprodEnDetalleProducto(antiguoNomprod, nuevoNomprod);
-		//productoRepository.actualizarNomprodEnProducto(antiguoNomprod, nuevoNomprod);
+		//Enviamos los cambios recientes a la categoría de producto NUEVOS
+		detalleRepository.actualizarCategoriaANuevo(nuevoNomprod, "NUEVOS");
 	}
 	
 

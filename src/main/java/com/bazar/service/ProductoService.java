@@ -40,4 +40,6 @@ public interface ProductoService {
 	public boolean actualizaCodpro(String codproActual, String nuevoCodpro);
 	
 	public void actualizarNomprod(String antiguoNomprod, String nuevoNomprod);
+	
+	//public void actualizarCategoriaANuevo(String nomProd, String nuevaCateg);
 }

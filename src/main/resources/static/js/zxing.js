@@ -3,9 +3,26 @@ const codeReader = new ZXing.BrowserMultiFormatReader();
 const videoElement = document.getElementById('video');
 const canvasElement = document.getElementById('debugCanvas');
 const detectedCodeLabel = document.getElementById('detectedCode');
-const inputReceptor = document.getElementById("buscadorProducto");
+//const inputReceptor = document.getElementById("buscadorProducto");
 let textScaned = "";
 let inputVal = "";
+
+
+// Función para obtener el input "buscadorProducto" priorizando el de SweetAlert
+function getInputReceptor() {
+    // Primero intenta obtener el input dentro del SweetAlert
+    const sweetAlertInput = document.querySelector('.swal2-container #buscadorProducto');
+    
+    // Si existe el input dentro del SweetAlert, lo retorna
+    if (sweetAlertInput) {
+        return sweetAlertInput;
+    }
+    
+    // Si no existe, retorna el input de la página HTML
+    return document.getElementById("buscadorProducto");
+}
+
+
 
 
 // Función para iniciar el lector
@@ -21,8 +38,12 @@ async function startBarcodeScanner() {
 		console.error('Error al acceder a la cámara:', err);
 		alert('No se pudo acceder a la cámara. Asegúrate de que el navegador tenga permisos.');
 	}
-
-
+	
+	//Para colocar El modalScaner por encima de  SweetAlert 
+	const modal = document.getElementById('barcodeModal');
+	modal.style.zIndex = '1065';
+	
+	const inputReceptor = getInputReceptor();
 
 	let isProcessing = false; // Bloqueo temporal
 

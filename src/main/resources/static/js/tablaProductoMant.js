@@ -432,9 +432,12 @@ async function actualizarCodigo(codigoActual, nombre) {
 		title: nombre, // Mostrar el nombre del producto
 		html: `
             <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-			
-                <label style="font-weight: bold; margin-top: 15px; margin-bottom: 5px;">CÓDIGO</label>
-                <input id="nuevoCodigo" type="text" class="swal2-input" 
+
+				<a type="button" class="btn btn-primary py-2 btn-lg fa-solid fa-camera"
+						id="startScannerButton" data-bs-toggle="modal"
+						data-bs-target="#barcodeModal" ></a>
+						
+                <input id="buscadorProducto" type="text" class="swal2-input" 
                        style="width: auto;"
                        value="${codigoActual}">
             </div>
@@ -444,7 +447,7 @@ async function actualizarCodigo(codigoActual, nombre) {
 		showCancelButton: true, // Mostrar botón de cancelar
 		cancelButtonText: "Cancelar",
 		preConfirm: () => {
-			const codigoN = parseInt(document.getElementById('nuevoCodigo').value, 10);
+			const codigoN = parseInt(document.querySelector('.swal2-container #buscadorProducto').value, 10);
 			if (isNaN(codigoN) || codigoN <= 0) {
 				Swal.showValidationMessage("El código debe ser positivo.");
 				return null;
@@ -880,7 +883,7 @@ async function actualizarPrecio(nombre, preciocompra, precioventa) {
 
 				if (selectCategoriaPrecios) {
 					selectCategoriaPrecios.dispatchEvent(new Event('change'));
-				}				
+				}
 				//Verifica si el campo input tiene valor
 				const buscador = document.getElementById('buscadorProducto');
 				if (buscador && buscador.value.trim() !== '') {

@@ -32,5 +32,11 @@ public interface DetalleProductoRepository  extends JpaRepository<DetalleProduct
     @Transactional
     @Query("UPDATE DetalleProducto dp SET dp.nomprod = :nuevoNomprod WHERE dp.nomprod = :antiguoNomprod")
     void actualizarNomprodEnDetalleProducto(String antiguoNomprod, String nuevoNomprod);
+	
+	@Modifying
+    @Transactional
+	@Query("UPDATE DetalleProducto dp SET dp.nomcateg = :nuevaCateg WHERE dp.nomprod = :nomProd")
+	void actualizarCategoriaANuevo(String nomProd, String nuevaCateg);
+	
 
 }
