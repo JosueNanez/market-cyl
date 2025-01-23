@@ -129,4 +129,17 @@ public class ProductoServiceImpl implements ProductoService {
 		return productoRepository.findProductosByNomCateg(nomcateg);
 	}
 
+	@Override
+	public boolean actualizaCodpro(String codproActual, String nuevoCodpro) {
+        int filasActualizadas = productoRepository.actualizarCodpro(codproActual, nuevoCodpro);
+        return filasActualizadas > 0;
+	}
+
+	@Override
+	public void actualizarNomprod(String antiguoNomprod, String nuevoNomprod) {
+		detalleRepository.actualizarNomprodEnDetalleProducto(antiguoNomprod, nuevoNomprod);
+		//productoRepository.actualizarNomprodEnProducto(antiguoNomprod, nuevoNomprod);
+	}
+	
+
 }

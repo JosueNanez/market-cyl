@@ -172,7 +172,24 @@ public class ProductoController {
 		return "redirect:/mantenimiento/producto/lista";
 	}
 	
+	//ELIMINAR PRODUCTO POR COMPLETO ACCESO RAPIDO - PRECIOS
+	@GetMapping("/eliminarFisicoAccRap/{nombre}")
+	public String eliminarProductoAccRap(@PathVariable String nombre) {
+		servicio.eliminarProducto(nombre);
+		return "redirect:/mantenimiento/producto/listaPrecios";
+	}
 	
+	@GetMapping("/eliminarAccRap")
+    @ResponseBody
+    public String eliminarProductoAR(@RequestParam() String nombre) {
+        try {
+        	servicio.eliminarProducto(nombre);
+        	System.out.println("producto Eliminado");
+            return "Eliminado Definitivamente.";
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
 	
 	
 	
@@ -221,6 +238,34 @@ public class ProductoController {
         	servicio.actualizarPrecios(nomprod, preccompra, precventa);
         	System.out.println("producto Actualizado");
             return "Precios actualizados correctamente.";
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+	
+	@GetMapping("/actualizarCodigo")
+    @ResponseBody
+    public String actualizarCodigo(
+    		@RequestParam() String codactual,
+            @RequestParam() String nuevocodigo) {
+        try {
+        	servicio.actualizaCodpro(codactual, nuevocodigo);
+        	System.out.println("codigo Actualizado");
+            return "Codigo actualizado correctamente.";
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+	
+	@GetMapping("/actualizarNomProducto")
+    @ResponseBody
+    public String actualizarNombre(
+    		@RequestParam() String antiguonomprod,
+            @RequestParam() String nuevonomprod) {
+        try {
+        	servicio.actualizarNomprod(antiguonomprod, nuevonomprod);
+        	System.out.println("Nombre Actualizado");
+            return "Nombre actualizado correctamente.";
         } catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
