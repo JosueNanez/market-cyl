@@ -1,16 +1,23 @@
-# Usar una imagen base de Java (por ejemplo, OpenJDK 11)
-FROM openjdk:17
+# Usar una imagen base de Maven para compilar
+FROM maven:3.9.4-eclipse-temurin-17 AS builder
 
-# Establecer el directorio de trabajo en el contenedor
-#WORKDIR /usr/app
+# Copiar el código fuente al contenedor
+COPY . /usr/src/app
 
-# Copiar el archivo JAR compilado a la imagen Docker (asegúrate de tener el JAR generado antes)
-COPY "./target/Market_CYL-1.0.jar" "app.jar"
+# Establecer el directorio de trabajo
+WORKDIR /usr/src/app
 
-# Exponer el puerto 8080 (puerto predeterminado de Spring Boot)
+# Compilar y generar el archivo JAR
+RUN mvn clean package -DskipTests
+
+# Segunda etapa: usar una imagen ligera de Java para ejecutar el JAR
+FROM openjdk:17-jdk-slim
+
+# Copiar el JAR generado desde la etapa de compilación
+COPY --from=builder /usr/src/app/target/Market_CYL-1.0.jar app.jar
+
+# Exponer el puerto 8080
 EXPOSE 8080
 
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
-
-# Comando para ejecutar la aplicación
-#CMD ["java", "-jar", "your-app-name.jar"]
+# Ejecutar la aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]
