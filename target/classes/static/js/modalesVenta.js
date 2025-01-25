@@ -797,5 +797,5 @@ setInterval(() => {
             }
         })
         .catch(error => console.error('Error de conexión:', error));
-}, 1 * 60 * 1000);
+}, 14 * 60 * 1000);
 
