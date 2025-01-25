@@ -970,7 +970,7 @@ async function actualizarPrecio(nombre, preciocompra, precioventa) {
 
 
 
-/* Realiza una petición cada 14 minutos (14 * 60 * 1000 ms)
+/* Realiza una petición cada 14 minutos (14 * 60 * 1000 ms)*/
 setInterval(() => {
     fetch('/venta/accesosDirectos') // Reemplaza con tu endpoint de "ping"
         .then(response => {
@@ -981,4 +981,4 @@ setInterval(() => {
             }
         })
         .catch(error => console.error('Error de conexión:', error));
-}, 14 * 60 * 1000);*/
+}, 10 * 60 * 1000);
