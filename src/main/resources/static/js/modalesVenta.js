@@ -786,3 +786,16 @@ async function actualizarAccesoDir(valor) {
 
 
 
+// Realiza una petición cada 14 minutos (14 * 60 * 1000 ms)
+setInterval(() => {
+    fetch('/venta/accesosDirectos') // Reemplaza con tu endpoint de "ping"
+        .then(response => {
+            if (response.ok) {
+                console.log('Aplicación activa:', new Date().toISOString());
+            } else {
+                console.error('Error al realizar ping:', response.statusText);
+            }
+        })
+        .catch(error => console.error('Error de conexión:', error));
+}, 1 * 60 * 1000);
+
