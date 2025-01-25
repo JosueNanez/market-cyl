@@ -39,9 +39,18 @@ async function startBarcodeScanner() {
 		alert('No se pudo acceder a la cámara. Asegúrate de que el navegador tenga permisos.');
 	}
 	
-	//Para colocar El modalScaner por encima de  SweetAlert 
-	const modal = document.getElementById('barcodeModal');
-	modal.style.zIndex = '1065';
+	
+	
+	// Verifica si hay un SweetAlert abierto
+	const isSweetAlertOpen = document.querySelector('.swal2-container') !== null;
+
+	// Si hay un SweetAlert abierto, ajusta el z-index del modal para que se vea por encima 
+	if (isSweetAlertOpen) {
+	    const modal = document.getElementById('barcodeModal');
+	    modal.style.zIndex = '1065';
+	}
+	
+	
 	
 	const inputReceptor = getInputReceptor();
 
@@ -103,7 +112,7 @@ async function startBarcodeScanner() {
 function stopBarcodeScanner() {
 	codeReader.reset();
 	detectedCodeLabel.textContent = "";
-	titulobarcode.textContent = "LECTOR DE CÓDIGO";
+	//titulobarcode.textContent = "LECTOR DE CÓDIGO";
 }
 
 // Función para dibujar imagen de depuración

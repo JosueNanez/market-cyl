@@ -37,8 +37,8 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a class="dropdown-item" href="/mantenimiento/producto/listaPrecios">Precios</a></li>
-							<li><a class="dropdown-item" href="/mantenimiento/producto/lista">Consulta</a></li>
-							<li><a class="dropdown-item" href="/mantenimiento/producto/registro">Registro</a></li>
+							<li><a class="dropdown-item" href="/mantenimiento/producto/lista">Mantenimiento</a></li>
+							<li><a class="dropdown-item" href="/mantenimiento/producto/registro">Nuevo Producto</a></li>
 						</ul>
 					</li>
 					<li class="nav-item">
@@ -54,18 +54,22 @@
 
 	<div class="gap-1 col-11 ms-3 me-3" id="barraFiltros">
 		<div class="text-center my-4">
-			<h2>Consulta Productos</h2>
+			<h2>Mantenimiento de Productos</h2>
 		</div>
 		<div class="row" style="display: flex;">
-			<div class="col-5 col-sm-5 col-md-5 col-lg-3 mb-4">
+
+			
+			<div class="col-7 col-sm-7 col-md-7 col-lg-3 mb-4 gap-2" style="display: flex;">
+				<a type="button" class="btn btn-primary py-2 btn-md fa-solid fa-camera" id="startScannerButton"
+								data-bs-toggle="modal" data-bs-target="#barcodeModal"></a>
 				<input type="text" id="buscadorProducto" autofocus class="form-control" placeholder="🔎 Buscar"
 					oninput="buscar(this, 'registrosFiltrados')">
 				<div class="dropdown">
 					<ul id="suggestions-1" class="dropdown-menu"></ul>
 				</div>
 			</div>
-
-			<div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4">
+			
+			<div class="col-5 col-sm-5 col-md-5 col-lg-3 mb-4">
 				<select class="form-select" id="nomcateg" name="nomcateg">
 					<option value="" th:selected="${selectedCateg == null}" selected>Categorias</option>
 					<option th:each="categoria : ${categorias}" th:value="${categoria.nomcateg}"
@@ -73,6 +77,8 @@
 					</option>
 				</select>
 			</div>
+			
+			
 			<script>
 				// Generar el script condicionalmente
 				/*[[${selectedCateg != null}]]*/
@@ -85,7 +91,6 @@
 					});
 				}	
 			</script>
-
 		</div>
 	</div>
 

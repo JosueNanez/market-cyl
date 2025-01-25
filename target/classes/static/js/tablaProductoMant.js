@@ -1,3 +1,5 @@
+const titulobarcode = document.getElementById('barcodeModalLabel');
+
 //ALTURA CONTENEDOR ACCCESOS DIRECTOS
 document.addEventListener('DOMContentLoaded', () => {
 	function ajustarAltura() {
@@ -34,12 +36,13 @@ async function buscar(inputElement, suggestionsId) {
 
 		if (/^\d+$/.test(query)) {
 			if (query.length >= 8) {
-				return;
-				/*
+				//return;
+
 				// SI EL VALOR INGRESADO POR BARCODE ES NÚMERO EAN-8 o EAN-13
 				//console.log('El codigo Barra es: ' + query);
 				try {
-					const response = await fetch(`/venta/ProductoPorCodigo?codigo=${encodeURIComponent(query)}`);
+					const response = await fetch(`/mantenimiento/producto/ProductoPorCodigo?codigo=${encodeURIComponent(query)}`);
+
 					if (!response.ok) {
 						if (response.status === 500) {
 							const error = await response.json();
@@ -59,38 +62,111 @@ async function buscar(inputElement, suggestionsId) {
 
 
 					const producto = await response.json();
+
 					if (producto.length === 0) {
 						console.warn("No se encontraron productos.");
 						return;
-					}
 
-					//console.log(producto.detalleProducto.preVENTA);
-					productName = producto.nomPROD;
-					//REGISTRO EN LISTADO
-					if (productList[producto.nomPROD]) { //Para actualizar registro en listado
-						productList[producto.nomPROD].quantity += 1;
-						productList[producto.nomPROD].subtotal = productList[producto.nomPROD].quantity * productList[producto.nomPROD].price;
-					} else { //Para registrar producto en la listado
-						productList[producto.nomPROD] = {
-							name: producto.nomPROD,
-							price: producto.detalleProducto.preVENTA,
-							quantity: 1,
-							subtotal: producto.detalleProducto.preVENTA
-						};
 					}
+					console.log(producto);
+					const fila = document.createElement('tr');
 
-					titulobarcode.textContent = producto.nomPROD;
-					Swal.fire({
-						title: "Agregado !",
-						icon: "success",
-						draggable: true,
-						timer: 1000
-					});
-					updateTable();
+					const columna0 = document.createElement('th');
+					//columna0.scope = "row";
+					const enlaceEditarCod = document.createElement('a');
+					enlaceEditarCod.className = "btn btn-light fa-solid fa-pen-to-square";
+					enlaceEditarCod.onclick = () => actualizarCodigo(producto.codpro, producto.nomprod);
+
+					// Crear un contenedor flex
+					const contenedor = document.createElement('div');
+					contenedor.style.display = "flex";
+					contenedor.style.justifyContent = "space-between";
+					contenedor.style.alignItems = "center";
+
+					// Añadir el código y el enlace al contenedor
+					const textoCodpro = document.createElement('span');
+					textoCodpro.textContent = producto.codpro + "  ";
+					contenedor.appendChild(textoCodpro);
+					contenedor.appendChild(enlaceEditarCod);
+
+					// Insertar el contenedor en la celda
+					columna0.innerHTML = ""; // Limpiar cualquier contenido anterior
+					columna0.appendChild(contenedor);
+
+
+
+					const columna1 = document.createElement('td');
+					const enlaceEditarNom = document.createElement('a');
+					enlaceEditarNom.className = "btn btn-light fa-solid fa-pen-to-square";
+					enlaceEditarNom.onclick = () => actualizarNombre(producto.nomprod);
+					// Crear un contenedor flex
+					const contenedorNom = document.createElement('div');
+					contenedorNom.style.display = "flex";
+					contenedorNom.style.justifyContent = "space-between";
+					contenedorNom.style.alignItems = "center";
+
+					// Añadir el código y el enlace al contenedor
+					const textoNompro = document.createElement('span');
+					textoNompro.textContent = producto.nomprod + "  ";
+					contenedorNom.appendChild(textoNompro);
+					contenedorNom.appendChild(enlaceEditarNom);
+
+					columna1.innerHTML = ""; // Limpiar cualquier contenido anterior
+					columna1.appendChild(contenedorNom);
+
+
+					const columna2 = document.createElement('td');
+					columna2.innerHTML = producto.detalleproducto.precventa.toFixed(2);
+
+					const columna3 = document.createElement('td');
+					columna3.innerHTML = producto.fecvenc;
+
+					const columna4 = document.createElement('td');
+					columna4.innerHTML = producto.stockcodigo;
+
+					const columna5 = document.createElement('td');
+					columna5.innerHTML = producto.nomprov;
+
+					const columna6 = document.createElement('td');
+					const botonEliminar = document.createElement('button');
+					botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
+					//enlaceEditar.href = `/mantenimiento/producto/eliminar/${prod.codPRO}`;
+					botonEliminar.onclick = async () => {
+						Swal.fire({
+							title: "Eliminar Producto por Código?",
+							text: producto.codpro,
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#3085d6",
+							cancelButtonColor: "#d33",
+							confirmButtonText: "Si, eliminar!"
+						}).then((result) => {
+							if (result.isConfirmed) {
+
+								window.location.href = `/mantenimiento/producto/eliminar/${encodeURIComponent(producto.codpro)}`;
+							}
+						});
+					};
+					const enlaceEditar = document.createElement('a');
+					enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
+					enlaceEditar.href = `/mantenimiento/producto/editar/${producto.codpro}`;
+
+					columna6.appendChild(enlaceEditar);
+					columna6.appendChild(botonEliminar);
+
+
+					fila.appendChild(columna0);
+					fila.appendChild(columna1);
+					fila.appendChild(columna2);
+					fila.appendChild(columna3);
+					fila.appendChild(columna4);
+					fila.appendChild(columna5);
+					fila.appendChild(columna6);
+					sugerencias.appendChild(fila);
 
 				} catch (error) {
 					console.error("Error al buscar Productos...", error);
-				}*/
+				}
 
 			}
 		} else {
@@ -100,7 +176,6 @@ async function buscar(inputElement, suggestionsId) {
 			try {
 
 				//await delay(1000);
-
 				const response = await fetch(`/mantenimiento/producto/busquedaDinamica?param=${encodeURIComponent(query)}`);
 				if (!response.ok) {
 					throw new Error(`Error en la respuesta del servidor Producto: ${response.statusText}`);
@@ -127,36 +202,27 @@ async function buscar(inputElement, suggestionsId) {
 							//columna1.scope = "row";
 							columna0.innerHTML = "-";
 
-							const columna1 = document.createElement('th');
-							//columna1.scope = "row";
-							columna1.innerHTML = "-";
-
+							const columna1 = document.createElement('td');
+							columna1.innerHTML = prod.nomprod;
+							
 							const columna2 = document.createElement('td');
-							columna2.innerHTML = prod.nomprod;
-
+							columna2.innerHTML = prod.precventa.toFixed(2);
+							
 							const columna3 = document.createElement('td');
-							columna3.innerHTML = prod.preccompra.toFixed(2);
+							columna3.innerHTML = "-";
+							
+							
 							const columna4 = document.createElement('td');
-							columna4.innerHTML = prod.precventa.toFixed(2);
+							columna4.innerHTML = "-";
+							
 							const columna5 = document.createElement('td');
-							columna5.innerHTML = prod.ganancia.toFixed(2);
+							columna5.innerHTML = "-";
+							
 							const columna6 = document.createElement('td');
-							columna6.innerHTML = "-";
-							const columna7 = document.createElement('td');
-							columna7.innerHTML = prod.stockminimo;
-							const columna8 = document.createElement('td');
-							columna8.innerHTML = "-";
-							const columna9 = document.createElement('td');
-							columna9.innerHTML = prod.stockactual;
-							const columna10 = document.createElement('td');
-							columna10.innerHTML = prod.nomcateg;
-							const columna11 = document.createElement('td');
-							columna11.innerHTML = "-";
-							const columna12 = document.createElement('td');
 							const botonEliminar = document.createElement('a');
 							botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
 							botonEliminar.href = `/mantenimiento/producto/eliminarFisico/${prod.nomprod}`;
-							columna12.appendChild(botonEliminar);
+							columna6.appendChild(botonEliminar);
 
 							fila.appendChild(columna0);
 							fila.appendChild(columna1);
@@ -165,12 +231,6 @@ async function buscar(inputElement, suggestionsId) {
 							fila.appendChild(columna4);
 							fila.appendChild(columna5);
 							fila.appendChild(columna6);
-							fila.appendChild(columna7);
-							fila.appendChild(columna8);
-							fila.appendChild(columna9);
-							fila.appendChild(columna10);
-							fila.appendChild(columna11);
-							fila.appendChild(columna12);
 							sugerencias.appendChild(fila);
 
 						});
@@ -590,7 +650,7 @@ async function actualizarNombre(nombre) {
 
 
 
-// FUNCIONES PARA FORMULARIO DE PRECIOS
+// FUNCIONES PARA HTML FORM DE PRECIOS
 
 
 const selectCategoriaPrecios = document.getElementById('nomcategPrecios');  //Se ejecuta solo y cuando exista en el documento
