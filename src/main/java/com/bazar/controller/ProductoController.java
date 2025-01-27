@@ -2,6 +2,7 @@ package com.bazar.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.bazar.entity.Categoria;
 import com.bazar.entity.DetalleProducto;
 import com.bazar.entity.Producto;
 import com.bazar.entity.ProductoDTO;
@@ -57,7 +59,14 @@ public class ProductoController {
 	@GetMapping("/listaPrecios")
 	public String listaPrecios(Model proveed, Model categ) {
 	    proveed.addAttribute("proveedores", servProveedor.listarProveedores());
-	    categ.addAttribute("categorias", servCategoria.listarCategorias());
+	    
+	    //Quitando registros con nombre "ELIMINADOS" del arreglo categoria
+	    List<Categoria> categoriaFiltrada = servCategoria.listarCategorias();
+	    categoriaFiltrada = categoriaFiltrada.stream()
+	    	    .filter(categoria -> !categoria.getNomcateg().equals("ELIMINADOS"))
+	    	    .collect(Collectors.toList());
+	    
+	    categ.addAttribute("categorias", categoriaFiltrada);
 		return "mantenimiento_producto_precios";
 	}
 	
@@ -94,6 +103,28 @@ public class ProductoController {
 	@GetMapping("editar/{cod}")
 	public String mostrarMantenimentoEditarProd(@PathVariable String cod, Model modelo, Model proveed, Model categ) {
 		modelo.addAttribute("producto", servicio.productoPorCodigo(cod));
+		modelo.addAttribute("editable", false);
+        proveed.addAttribute("proveedores", servProveedor.listarProveedores());
+        categ.addAttribute("categorias", servCategoria.listarCategorias());
+		return "mantenimiento_producto_editar";
+	}
+	
+	@GetMapping("reactivar/{nom}") //Para reactivar productos eliminados
+	public String mostrarReactivarEditarProd(@PathVariable String nom, Model modelo, Model proveed, Model categ) {
+		
+		DetalleProducto eliminadoDetalle = servicio.detalleProductoNombre(nom);
+		eliminadoDetalle.setNomcateg("");
+
+		Producto productorecuperable = new Producto();
+		productorecuperable.setCodpro("000");
+		productorecuperable.setFecvenc(null);
+		productorecuperable.setStockcodigo(0);
+		productorecuperable.setNomprod(nom);
+		productorecuperable.setDetalleproducto(eliminadoDetalle);
+
+		modelo.addAttribute("producto", productorecuperable);
+		modelo.addAttribute("editable", true); // Indica que el campo CODIGO en HTML debe ser editable
+		
         proveed.addAttribute("proveedores", servProveedor.listarProveedores());
         categ.addAttribute("categorias", servCategoria.listarCategorias());
 		return "mantenimiento_producto_editar";
@@ -132,6 +163,7 @@ public class ProductoController {
         proveed.addAttribute("proveedores", servProveedor.listarProveedores());
         categ.addAttribute("categorias", servCategoria.listarCategorias());
 		model.addAttribute("mensajeExito", "Producto actualizado con éxito!");
+		model.addAttribute("editable", false);
 		return "redirect:/mantenimiento/producto/lista?selectedCateg=" + producto.getDetalleproducto().getNomcateg();
 	}
 	
@@ -152,38 +184,47 @@ public class ProductoController {
 		// StockRepo = Stock Min - Stock Actual
 		float minimo = detalleExistente.getStockminimo();
 		float actual = detalleExistente.getStockactual();
-		detalleExistente.setStockFaltanteRepo(minimo - actual);
+		detalleExistente.setStockfaltanterepo(minimo - actual);
+		
+		//Si el stockactual es 0 se envía a categoria "ELIMINADOS"
+		if(detalleExistente.getStockactual() == 0) {
+			detalleExistente.setNomcateg("ELIMINADOS");
+		}
 		
 		//Actualizar la tabla DetalleProducto con objeto detalleExistente
 		 //servicio.actualizarStockActual(nomProdElim, resta);
 		 servicio.actualizarDetalleProducto(nomProdElim, detalleExistente);
 		 
-		 
+		modelo.addAttribute("categorias", servCategoria.listarCategorias()); 
 		servicio.eliminarProductoPorCodigo(cod);
 		modelo.addAttribute("mensajeExito", "Producto Eliminado");
 		return "mantenimiento_producto_list";
 	}
 	
 	
-	//ELIMINAR PRODUCTO POR COMPLETO
+	//ELIMINAR PRODUCTO POR COMPLETO FISICO
 	@GetMapping("/eliminarFisico/{nombre}")
 	public String eliminarProducto(@PathVariable String nombre) {
 		servicio.eliminarProducto(nombre);
 		return "redirect:/mantenimiento/producto/lista";
 	}
 	
-	//ELIMINAR PRODUCTO POR COMPLETO ACCESO RAPIDO - PRECIOS
+	/*
 	@GetMapping("/eliminarFisicoAccRap/{nombre}")
 	public String eliminarProductoAccRap(@PathVariable String nombre) {
 		servicio.eliminarProducto(nombre);
 		return "redirect:/mantenimiento/producto/listaPrecios";
-	}
+	}*/
 	
+	//DESACTIVAR O ELIMINAR PRODUCTO QUE NO SE VENDE- ACCESO RAPIDO - PRECIOS
 	@GetMapping("/eliminarAccRap")
     @ResponseBody
     public String eliminarProductoAR(@RequestParam() String nombre) {
         try {
-        	servicio.eliminarProducto(nombre);
+        	//servicio.eliminarProducto(nombre);
+        	servicio.eliminarProductoYActualizarDetalle(nombre);
+        	
+        	
         	System.out.println("producto Eliminado");
             return "Eliminado Definitivamente.";
         } catch (RuntimeException e) {
@@ -279,6 +320,11 @@ public class ProductoController {
 		return servicio.SPBusquedaDimanProducto(param);
 	}
 	
-	
+	//LISTAR PRODUCTOS ELIMINADOS
+	@GetMapping("/productosEliminados")
+	@ResponseBody
+	public List<DetalleProducto> listarProductosEliminados(){
+		return servicio.listarProductosEliminados();
+	}
 
 }

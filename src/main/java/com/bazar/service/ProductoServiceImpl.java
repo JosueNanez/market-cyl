@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.lang.Override;
 
 import com.bazar.entity.DetalleProducto;
 import com.bazar.entity.Producto;
@@ -108,7 +109,7 @@ public class ProductoServiceImpl implements ProductoService {
 			producto.setNomcateg(detalleproducto.getNomcateg());
 			producto.setStockminimo(detalleproducto.getStockminimo());
 			producto.setStockactual(detalleproducto.getStockactual());
-			producto.setStockFaltanteRepo(detalleproducto.getStockFaltanteRepo());
+			producto.setStockfaltanterepo(detalleproducto.getStockfaltanterepo());
 
 			return detalleRepository.save(producto);
 		} else {
@@ -141,6 +142,18 @@ public class ProductoServiceImpl implements ProductoService {
 		//Enviamos los cambios recientes a la categoría de producto NUEVOS
 		detalleRepository.actualizarCategoriaANuevo(nuevoNomprod, "NUEVOS");
 	}
-	
+
+	@Override
+	public void eliminarProductoYActualizarDetalle(String nomprod) {
+        productoRepository.eliminarProductosPorNombre(nomprod);
+        //Para mantener el registro después de eliminado
+        productoRepository.actualizarDetalleProductoPorNombre(nomprod);
+	}
+
+	@Override
+	public List<DetalleProducto> listarProductosEliminados() {
+		// TODO Auto-generated method stub
+		return detalleRepository.findByNomcateg("ELIMINADOS");
+	}
 
 }

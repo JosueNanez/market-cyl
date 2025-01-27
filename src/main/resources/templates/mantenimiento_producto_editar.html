@@ -63,7 +63,7 @@
 							<div class="mb-3">
 								<label for="nomprod" class="form-label">Nombre del Producto</label>
 								<input type="text" class="form-control" id="nomprod" name="nomprod"
-									th:field="*{nomprod}" oninput="validateTexto(this, 2, 'error-msgNomb')">
+									th:field="*{nomprod}" oninput="validateTexto(this, 2, 'error-msgNomb')" readonly>
 								<div id="error-msgNomb" style="display: none;" class="text-danger"></div>
 								<div class="text-danger" th:if="${#fields.hasErrors('nomprod')}" th:errors="*{nomprod}">
 								</div>
@@ -73,7 +73,7 @@
 							<div class="mb-3">
 								<label for="codpro" class="form-label">Código de Barras</label>
 								<input type="text" class="form-control" id="codpro" name="codpro" th:field="*{codpro}"
-									oninput="validateTexto(this, 1, 'error-msgCOD')">
+									oninput="validateTexto(this, 1, 'error-msgCOD')" th:attr="readonly=${!editable ? 'readonly' : null}">
 								<div id="error-msgCOD" style="display: none;" class="text-danger"></div>
 								<div class="text-danger" th:if="${#fields.hasErrors('codpro')}" th:errors="*{codpro}">
 								</div>

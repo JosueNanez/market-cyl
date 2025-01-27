@@ -67,6 +67,6 @@ public class DetalleProducto {
     private float stockactual;
     
     @Column(name = "stockfaltanterepo")
-    private float stockFaltanteRepo;
+    private float stockfaltanterepo;
 
 }

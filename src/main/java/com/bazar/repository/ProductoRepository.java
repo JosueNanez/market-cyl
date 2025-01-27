@@ -29,6 +29,21 @@ public interface ProductoRepository extends JpaRepository<Producto, String>{
     @Transactional
     @Query("UPDATE Producto p SET p.codpro = :nuevoCodpro WHERE p.codpro = :codproActual")
     int actualizarCodpro(String codproActual, String nuevoCodpro);
-
+    
+    
+    
+    
+    
+    // Método para eliminar registros de la tabla "producto"
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Producto p WHERE p.nomprod = :nomprod")
+    void eliminarProductosPorNombre(String nomprod);
+    
+    // Método para actualizar la tabla "detalleproducto" al eliminar en producto
+    @Transactional
+    @Modifying
+    @Query("UPDATE DetalleProducto dp SET dp.stockactual = 0, dp.stockfaltanterepo = dp.stockminimo, dp.nomcateg = 'ELIMINADOS' WHERE dp.nomprod = :nomprod")
+    void actualizarDetalleProductoPorNombre(String nomprod);
 
 }

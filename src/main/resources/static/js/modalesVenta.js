@@ -23,7 +23,7 @@ async function abrirModal(categoria) {
 	// Cargar imagen y texto dinámicamente (usando Thymeleaf variable `categoria`)
 	//modalImage.src = `/images/${categoria}.png`;
 	modalTitle.textContent = `${categoria}`;
-	console.log(categoria);
+	//console.log(categoria);
 
 	try {
 		const response = await fetch(`/venta/lista/apiProdCategoria?categor=${categoria}`);
@@ -31,7 +31,7 @@ async function abrirModal(categoria) {
 			throw new Error(`Error en la respuesta del servidor`);
 		}
 		const productosFiltrados = await response.json();
-		console.log(productosFiltrados);
+		//console.log(productosFiltrados);
 
 		productosFiltrados.forEach(prod => {
 			const div = document.createElement('div');
@@ -41,12 +41,13 @@ async function abrirModal(categoria) {
 
 			//Letra roja si solo hay un producto en stock
 			let minimo = prod.stockminimo - 1;
+
 			if (prod.stockfaltanterepo >= minimo) {
 				button.className = 'btn btn btn-danger w-100 h-100';
 			} else {
 				button.className = 'btn btn-outline-success w-100 h-100';
 			}
-			//button.className = 'btn btn-outline-success w-100 h-100';
+
 			button.setAttribute('data-bs-dismiss', 'modal');
 			const span = document.createElement('span');
 			span.textContent = prod.nomprod;
@@ -56,6 +57,7 @@ async function abrirModal(categoria) {
 			span2.className = 'd-block';
 			button.appendChild(span);
 			button.appendChild(span2);
+
 			button.onclick = async () => {
 
 				let cantidad = 0;
@@ -131,8 +133,10 @@ async function abrirModal(categoria) {
 					timer: 1000
 				});
 			};
+
 			div.appendChild(button);
 			filasProductos.appendChild(div);
+
 		});
 		//filasProductos.classList('show');
 
@@ -268,98 +272,103 @@ async function buscar(inputElement, suggestionsId) {
 					throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
 				}
 				const productos = await response.json();
-				if (productos.length === 0) {
+			
+				//Nuevo arreglo con productos que no sean descontinuados
+				const productosFiltrados = productos.filter(producto => producto.nomcateg !== "ELIMINADOS");
+				
+				if (productosFiltrados.length === 0) {
 					console.warn("No se encontraron productos.");
 					return;
 				}
 
 				//Enviar sugerencias al UL
-				productos.slice(0, 6).forEach(prod => {
-					const li = document.createElement('li');
-					const boton = document.createElement('button');
-					li.appendChild(boton);
-					boton.textContent = prod.nomprod + "   -  S/. " + prod.precventa.toFixed(2);
+				productosFiltrados.slice(0, 6).forEach(prod => {
 
-					//Letra roja si solo hay un producto en stock
-					let minimo = prod.stockminimo - 1;
-					if (prod.stockfaltanterepo >= minimo) {
-						boton.className = 'dropdown-item text-danger';
-					} else {
-						boton.className = 'dropdown-item';
-					}
-					//boton.className = 'dropdown-item'; //border-bottom py-2
+						const li = document.createElement('li');
+						const boton = document.createElement('button');
+						li.appendChild(boton);
+						boton.textContent = prod.nomprod + "   -  S/. " + prod.precventa.toFixed(2);
 
-					boton.type = 'button';
-					boton.onclick = async () => {
-						let cantidad = 0;
-						const { value: cant } = await Swal.fire({
-							position: "top",
-							title: `<a type="button" class="btn btn-outline-dark btn-lg" onclick="actualizaPrecio('${prod.nomprod}', '${prod.preccompra}', '${prod.precventa}')">${(prod.nomprod)}</a>`,
+						//Letra roja si solo hay un producto en stock
+						let minimo = prod.stockminimo - 1;
+						if (prod.stockfaltanterepo >= minimo) {
+							boton.className = 'dropdown-item text-danger';
 
-							//title: prod.nomprod,
-							html: `
+						} else {
+							boton.className = 'dropdown-item';
+						}
+						boton.type = 'button';
+						boton.onclick = async () => {
+							let cantidad = 0;
+							const { value: cant } = await Swal.fire({
+								position: "top",
+								title: `<a type="button" class="btn btn-outline-dark btn-lg" onclick="actualizaPrecio('${prod.nomprod}', '${prod.preccompra}', '${prod.precventa}')">${(prod.nomprod)}</a>`,
+
+								//title: prod.nomprod,
+								html: `
 					        <div style="display: flex; justify-content: space-between; font-size: 1rem; margin-bottom: 10px;">
 					            <span>Precio: S/ ${(prod.precventa).toFixed(2)}</span>
 					            <span id="subtotal">Subtotal: S/ ${(prod.precventa).toFixed(2)}</span>
 					        </div>
 					    `,
-							input: "number",
-							inputValue: 1, // Número "1" por defecto
-							inputPlaceholder: "0.000",
-							inputAttributes: {
-								step: "0.001", // Permitir 3 decimales
-								min: "0" // Evitar valores negativos
-							},
-							customClass: {
-								input: "swal2-input", // Ajustar estilo del input
-							},
-							confirmButtonText: "Aceptar",
-							showCancelButton: true,
-							cancelButtonText: "Cancelar",
-							didOpen: () => {
-								// Obtener elementos para actualizar dinámicamente
-								const inputElement = Swal.getInput();
-								const subtotalElement = document.getElementById("subtotal");
+								input: "number",
+								inputValue: 1, // Número "1" por defecto
+								inputPlaceholder: "0.000",
+								inputAttributes: {
+									step: "0.001", // Permitir 3 decimales
+									min: "0" // Evitar valores negativos
+								},
+								customClass: {
+									input: "swal2-input", // Ajustar estilo del input
+								},
+								confirmButtonText: "Aceptar",
+								showCancelButton: true,
+								cancelButtonText: "Cancelar",
+								didOpen: () => {
+									// Obtener elementos para actualizar dinámicamente
+									const inputElement = Swal.getInput();
+									const subtotalElement = document.getElementById("subtotal");
 
-								// Agregar un evento de input al campo para actualizar el subtotal dinámicamente
-								inputElement.addEventListener('input', () => {
-									const inputValue = parseFloat(inputElement.value) || 0; // Validar número
-									const subtotal = (inputValue * prod.precventa).toFixed(2); // Calcular subtotal
-									subtotalElement.textContent = `Subtotal: S/ ${subtotal}`; // Actualizar subtotal
-								});
-							},
-							inputValidator: (value) => {
-								if (!value || parseFloat(value) <= 0) {
-									return "Por favor, ingrese un número positivo.";
+									// Agregar un evento de input al campo para actualizar el subtotal dinámicamente
+									inputElement.addEventListener('input', () => {
+										const inputValue = parseFloat(inputElement.value) || 0; // Validar número
+										const subtotal = (inputValue * prod.precventa).toFixed(2); // Calcular subtotal
+										subtotalElement.textContent = `Subtotal: S/ ${subtotal}`; // Actualizar subtotal
+									});
+								},
+								inputValidator: (value) => {
+									if (!value || parseFloat(value) <= 0) {
+										return "Por favor, ingrese un número positivo.";
+									}
+									return null; // Validación exitosa
 								}
-								return null; // Validación exitosa
+							});
+
+							if (cant) {
+								cantidad = parseFloat(cant); // Convertir el valor a número flotante
+							} else {
+								sugerencias.innerHTML = '';
+								sugerencias.classList.remove('show');
+								inputElement.value = '';
+								return; // Salir si no se ingresa nada o se cancela
 							}
-						});
 
-						if (cant) {
-							cantidad = parseFloat(cant); // Convertir el valor a número flotante
-						} else {
-							sugerencias.innerHTML = '';
-							sugerencias.classList.remove('show');
-							inputElement.value = '';
-							return; // Salir si no se ingresa nada o se cancela
+							productName = prod.nomprod;
+							//REGISTRO EN LISTADO
+							if (productList[prod.nomprod]) { //Para actualizar registro en listado
+								productList[prod.nomprod].quantity += cantidad;
+								productList[prod.nomprod].subtotal = productList[prod.nomprod].quantity * productList[prod.nomprod].price;
+							} else { //Para registrar producto en la listado
+								productList[prod.nomprod] = {
+									name: prod.nomprod,
+									price: prod.precventa,
+									quantity: cantidad,
+									subtotal: cantidad * prod.precventa
+								};
+							}
+							
 						}
-
-						productName = prod.nomprod;
-						//REGISTRO EN LISTADO
-						if (productList[prod.nomprod]) { //Para actualizar registro en listado
-							productList[prod.nomprod].quantity += cantidad;
-							productList[prod.nomprod].subtotal = productList[prod.nomprod].quantity * productList[prod.nomprod].price;
-						} else { //Para registrar producto en la listado
-							productList[prod.nomprod] = {
-								name: prod.nomprod,
-								price: prod.precventa,
-								quantity: cantidad,
-								subtotal: cantidad * prod.precventa
-							};
-						}
-						updateTable();
-					}
+					updateTable();
 					sugerencias.appendChild(li);
 				});
 				sugerencias.classList.add('show');
@@ -416,12 +425,12 @@ async function actualizaPrecio(nombre, preciocompra, precioventa) {
 
 	if (formValues) {
 		const { compra, venta } = formValues;
-		
+
 		//Si el precio de compra es mayor al de venta
 		let precCompra = 0.00;
-		if (compra >= venta){
+		if (compra >= venta) {
 			precCompra = venta - 0.10;
-		} else { 
+		} else {
 			precCompra = compra;
 		}
 
@@ -713,13 +722,16 @@ async function buscadorAccess(inputElement, suggestionsId) {
 				throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
 			}
 			const productos = await response.json();
-			if (productos.length === 0) {
+			
+			const productosFiltrados = productos.filter(producto => producto.nomcateg !== "ELIMINADOS");
+			
+			if (productosFiltrados.length === 0) {
 				console.warn("No se encontraron productos.");
 				return;
 			}
 
 			//Enviar sugerencias al UL
-			productos.slice(0, 6).forEach(prod => {
+			productosFiltrados.slice(0, 6).forEach(prod => {
 				const li = document.createElement('li');
 				const boton = document.createElement('button');
 				li.appendChild(boton);
@@ -763,7 +775,7 @@ async function actualizarAccesoDir(valor) {
 		if (!response.ok) {
 			Swal.fire({
 				icon: "error",
-				title: "Producto no registrado!",
+				title: "Producto sin Stock!",
 				timer: 2000
 			});
 			throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
@@ -788,14 +800,14 @@ async function actualizarAccesoDir(valor) {
 
 /* Realiza una petición cada 14 minutos (14 * 60 * 1000 ms)*/
 setInterval(() => {
-    fetch('/venta/accesosDirectos') // Reemplaza con tu endpoint de "ping"
-        .then(response => {
-            if (response.ok) {
-                console.log('Aplicación activa:', new Date().toISOString());
-            } else {
-                console.error('Error al realizar ping:', response.statusText);
-            }
-        })
-        .catch(error => console.error('Error de conexión:', error));
-}, 10 * 60 * 1000);
+	fetch('/api/ping') // Reemplaza con tu endpoint de "ping"
+		.then(response => {
+			if (response.ok) {
+				console.log('Aplicación activa:', new Date().toISOString());
+			} else {
+				console.error('Error al realizar ping:', response.statusText);
+			}
+		})
+		.catch(error => console.error('Error de conexión:', error));
+}, 5 * 60 * 1000);
 

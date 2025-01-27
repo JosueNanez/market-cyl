@@ -19,7 +19,7 @@ public interface ProductoService {
 	
 	public ProductoDTO registraActualizaProducto(ProductoDTO dto);
 	
-	public void eliminarProducto(String nomprod);
+	public void eliminarProducto(String nomprod); //Eliminación Fisica
 	
 	public List<DetalleProducto> SPBusquedaDimanProducto(String nomprod);
 	
@@ -41,5 +41,8 @@ public interface ProductoService {
 	
 	public void actualizarNomprod(String antiguoNomprod, String nuevoNomprod);
 	
-	//public void actualizarCategoriaANuevo(String nomProd, String nuevaCateg);
+	public void eliminarProductoYActualizarDetalle(String nomprod);
+	
+	public List<DetalleProducto> listarProductosEliminados();
+
 }

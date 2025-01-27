@@ -10,8 +10,8 @@ let endX = 0, endY = 0;     // Posición final del arrastre
 
 document.addEventListener('DOMContentLoaded', () => {
 	const carouselSlide = document.getElementById('DeslizaCarrusel');
-	
-	
+
+
 	// Mostrar el segundo slide inmediatamente
 	const offset = -currentIndex * 100;
 	carouselSlide.style.transform = `translateX(${offset}%)`;
@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	//Autofocus para el input buscador luego de la transición
 	const inputbuscador = document.getElementById('buscadorProducto');
 	inputbuscador.focus();
-	
+
 	// Habilitar la transición suave después de un breve tiempo
 	setTimeout(() => {
 		carouselSlide.style.transition = 'transform 0.5s ease';
 	}, 50); // Esperar un pequeño retraso
-	
+
 	// Función para cambiar slide
 	window.cambiarSlide = (direction) => {
 		// Calcular el índice del siguiente slide
@@ -127,65 +127,69 @@ document.addEventListener('DOMContentLoaded', () => {
 		const alturaRestante = alturaPantalla - sumaAltura;
 		dynamicDiv.style.height = `${alturaRestante}px`;
 	});
-	
+
 	cargarCategorias();
 });
 
 
 
-async function cargarCategorias(){
-	
+async function cargarCategorias() {
+
 	const contenedor = document.getElementById('contenedorCategorias');
-	
+
 	try {
 		const response = await fetch(`/venta/categorias`)
-		if (!response.ok){
+		if (!response.ok) {
 			throw new Error(`Error en la respuesta de categorias.`)
 		}
 		const categorias = await response.json();
-		console.log(categorias);
-		
+		//console.log(categorias);
+
 		contenedor.innerHTML = '';
 
-		        // Iterar sobre las categorías y crear el HTML dinámicamente
-		        categorias.forEach(cat => {
-		            // Crear el contenedor de la categoría
-		            const colDiv = document.createElement('div');
-		            colDiv.className = 'col-md-3 col-6';
+		// Iterar sobre las categorías y crear el HTML dinámicamente
+		categorias.forEach(cat => {
 
-		            // Crear la tarjeta de categoría
-		            const cardDiv = document.createElement('div');
-		            cardDiv.className = 'category-card';
-		            cardDiv.setAttribute('data-bs-toggle', 'modal');
-		            cardDiv.setAttribute('data-bs-target', '#categoryModal');
-		            cardDiv.setAttribute('onclick', `abrirModal('${cat.nomcateg}')`);
+			if (cat.nomcateg != "ELIMINADOS") {
 
-		            // Crear la imagen de la categoría
-		            const img = document.createElement('img');
-		            img.className = 'category-image img-thumbnail rounded';
-		            img.src = `/images/${cat.nomcateg}.png`; // Ruta de la imagen
-		            img.alt = 'Categoría';
-		            img.loading = 'lazy';
+				// Crear el contenedor de la categoría
+				const colDiv = document.createElement('div');
+				colDiv.className = 'col-md-3 col-6';
 
-		            // Crear el título de la categoría
-		            const title = document.createElement('h5');
-		            title.className = 'text-center mt-2';
-		            title.textContent = cat.nomcateg;
+				// Crear la tarjeta de categoría
+				const cardDiv = document.createElement('div');
+				cardDiv.className = 'category-card';
+				cardDiv.setAttribute('data-bs-toggle', 'modal');
+				cardDiv.setAttribute('data-bs-target', '#categoryModal');
+				cardDiv.setAttribute('onclick', `abrirModal('${cat.nomcateg}')`);
 
-		            // Agregar los elementos a la tarjeta y al contenedor
-		            cardDiv.appendChild(img);
-		            cardDiv.appendChild(title);
-		            colDiv.appendChild(cardDiv);
-		            contenedor.appendChild(colDiv);
-		        });
-		
-		
-		
-		
+				// Crear la imagen de la categoría
+				const img = document.createElement('img');
+				img.className = 'category-image img-thumbnail rounded';
+				img.src = `/images/${cat.nomcateg}.png`; // Ruta de la imagen
+				img.alt = 'Categoría';
+				img.loading = 'lazy';
+
+				// Crear el título de la categoría
+				const title = document.createElement('h5');
+				title.className = 'text-center mt-2';
+				title.textContent = cat.nomcateg;
+
+				// Agregar los elementos a la tarjeta y al contenedor
+				cardDiv.appendChild(img);
+				cardDiv.appendChild(title);
+				colDiv.appendChild(cardDiv);
+				contenedor.appendChild(colDiv);
+			}
+		});
+
+
+
+
 	} catch (error) {
 		console.error(" MS JOSUE, Error al buscar categorias:", error);
 	}
-	
+
 }
 
 
@@ -199,15 +203,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	const navbar = document.getElementById('nav');
 	const fixedDiv = document.getElementById('cabezaColumna');
 	const pieDiv = document.getElementById('pieColumna');
-	
+
 	const dynamicDiv = document.getElementById('contenedorTablaVenta');
-	
+
 	// Obtener altura total de fixedDiv incluyendo márgenes
 	const fixedDivStyles = window.getComputedStyle(fixedDiv);
 	const fixedDivMarginTop = parseFloat(fixedDivStyles.marginTop); // Margen superior
 	const fixedDivMarginBottom = parseFloat(fixedDivStyles.marginBottom); // Margen inferior
 	const fixedDivHeight = fixedDiv.offsetHeight + fixedDivMarginTop + fixedDivMarginBottom;
-	
+
 	// Obtener altura total de columnDiv incluyendo márgenes
 	const pieDivStyles = window.getComputedStyle(pieDiv);
 	const pieDivMarginTop = parseFloat(pieDivStyles.marginTop); // Margen superior
@@ -242,15 +246,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Obtener elementos del DOM
 	const fixedDiv = document.getElementById('freezeventas');
 	const pieDiv = document.getElementById('pieAccesoDirecto');
-	
+
 	const dynamicDiv = document.getElementById('contenedorAccesoRapido');
-	
+
 	// Obtener altura total de fixedDiv incluyendo márgenes
 	const fixedDivStyles = window.getComputedStyle(fixedDiv);
 	const fixedDivMarginTop = parseFloat(fixedDivStyles.marginTop); // Margen superior
 	const fixedDivMarginBottom = parseFloat(fixedDivStyles.marginBottom); // Margen inferior
 	const fixedDivHeight = fixedDiv.offsetHeight + fixedDivMarginTop + fixedDivMarginBottom;
-	
+
 	// Obtener altura total de columnDiv incluyendo márgenes
 	const pieDivStyles = window.getComputedStyle(pieDiv);
 	const pieDivMarginTop = parseFloat(pieDivStyles.marginTop); // Margen superior
@@ -260,9 +264,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Obtener altura de navbar
 	const navbar = document.getElementById('nav');
 	const navbarHeight = navbar.offsetHeight;
-	
+
 	let sumaAltura = 0;
-	
+
 	const anchoVentana = window.innerWidth;
 	//Anchos: 115 grande, 60 celular
 	if (anchoVentana >= 800) {
@@ -272,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		//Sumar alturas en pantalla chica
 		sumaAltura = fixedDivHeight + pieDivHeight;
 	}
-	
+
 	// Calcular la altura restante
 	const alturaPantalla = window.innerHeight;
 	const alturaRestante = alturaPantalla - sumaAltura;
@@ -293,48 +297,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // SCROLL INVISIBLE DIV - CATEGORIAS
 document.addEventListener('DOMContentLoaded', () => {
-    const containers = document.querySelectorAll('.custom-scroll-container'); // Seleccionar todos los contenedores
+	const containers = document.querySelectorAll('.custom-scroll-container'); // Seleccionar todos los contenedores
 
-    containers.forEach((container) => {
-        let isTouching = false; // Bandera para saber si hay un toque activo
-        let startY = 0; // Coordenada inicial del toque
-        let scrollTopStart = 0; // Posición inicial del scroll
+	containers.forEach((container) => {
+		let isTouching = false; // Bandera para saber si hay un toque activo
+		let startY = 0; // Coordenada inicial del toque
+		let scrollTopStart = 0; // Posición inicial del scroll
 
-        // Función para verificar si el evento ocurre en un botón o enlace
-        const isInteractiveElement = (target) => {
-            return target.tagName === 'BUTTON' || target.tagName === 'A';
-        };
+		// Función para verificar si el evento ocurre en un botón o enlace
+		const isInteractiveElement = (target) => {
+			return target.tagName === 'BUTTON' || target.tagName === 'A';
+		};
 
-        // Desplazamiento con el scroll del mouse
-        container.addEventListener('wheel', (event) => {
-            if (isInteractiveElement(event.target)) return; // No bloquear eventos en botones o enlaces
-            event.preventDefault(); // Evitar scroll predeterminado del navegador
-            const scrollAmount = event.deltaY * 2; // Cantidad de desplazamiento
-            container.scrollTop += scrollAmount; // Cambiar posición de scroll
-        });
+		// Desplazamiento con el scroll del mouse
+		container.addEventListener('wheel', (event) => {
+			if (isInteractiveElement(event.target)) return; // No bloquear eventos en botones o enlaces
+			event.preventDefault(); // Evitar scroll predeterminado del navegador
+			const scrollAmount = event.deltaY * 2; // Cantidad de desplazamiento
+			container.scrollTop += scrollAmount; // Cambiar posición de scroll
+		});
 
-        // Manejo del inicio del toque
-        container.addEventListener('touchstart', (event) => {
-            if (isInteractiveElement(event.target)) return; // No bloquear eventos en botones o enlaces
-            isTouching = true;
-            startY = event.touches[0].clientY; // Registrar posición inicial del toque
-            scrollTopStart = container.scrollTop; // Registrar posición inicial del scroll
-        });
+		// Manejo del inicio del toque
+		container.addEventListener('touchstart', (event) => {
+			if (isInteractiveElement(event.target)) return; // No bloquear eventos en botones o enlaces
+			isTouching = true;
+			startY = event.touches[0].clientY; // Registrar posición inicial del toque
+			scrollTopStart = container.scrollTop; // Registrar posición inicial del scroll
+		});
 
-        // Manejo del movimiento táctil
-        container.addEventListener('touchmove', (event) => {
-            if (!isTouching || isInteractiveElement(event.target)) return; // Solo continuar si hay un toque válido
-            const currentY = event.touches[0].clientY; // Posición actual del toque
-            const deltaY = startY - currentY; // Diferencia entre posiciones
-            container.scrollTop = scrollTopStart + deltaY; // Ajustar scroll directamente
-            event.preventDefault(); // Prevenir comportamiento predeterminado solo para scroll
-        });
+		// Manejo del movimiento táctil
+		container.addEventListener('touchmove', (event) => {
+			if (!isTouching || isInteractiveElement(event.target)) return; // Solo continuar si hay un toque válido
+			const currentY = event.touches[0].clientY; // Posición actual del toque
+			const deltaY = startY - currentY; // Diferencia entre posiciones
+			container.scrollTop = scrollTopStart + deltaY; // Ajustar scroll directamente
+			event.preventDefault(); // Prevenir comportamiento predeterminado solo para scroll
+		});
 
-        // Manejo del final del toque
-        container.addEventListener('touchend', () => {
-            isTouching = false; // Finalizar el toque
-        });
-    });
+		// Manejo del final del toque
+		container.addEventListener('touchend', () => {
+			isTouching = false; // Finalizar el toque
+		});
+	});
 });
 
 

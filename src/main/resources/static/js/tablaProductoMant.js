@@ -1,4 +1,6 @@
 const titulobarcode = document.getElementById('barcodeModalLabel');
+const selectCategoria = document.getElementById('nomcateg');
+const entradaBuscador = document.getElementById('buscadorProducto');
 
 //ALTURA CONTENEDOR ACCCESOS DIRECTOS
 document.addEventListener('DOMContentLoaded', () => {
@@ -204,24 +206,81 @@ async function buscar(inputElement, suggestionsId) {
 
 							const columna1 = document.createElement('td');
 							columna1.innerHTML = prod.nomprod;
-							
+
 							const columna2 = document.createElement('td');
 							columna2.innerHTML = prod.precventa.toFixed(2);
-							
+
 							const columna3 = document.createElement('td');
 							columna3.innerHTML = "-";
-							
-							
+
+
 							const columna4 = document.createElement('td');
 							columna4.innerHTML = "-";
-							
+
 							const columna5 = document.createElement('td');
 							columna5.innerHTML = "-";
-							
+
+							/*
+							const botonEliminar = document.createElement('a');
+							botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
+							botonEliminar.href = `/mantenimiento/producto/eliminarFisico/${prod.nomprod}`;*/
+
 							const columna6 = document.createElement('td');
 							const botonEliminar = document.createElement('a');
 							botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
-							botonEliminar.href = `/mantenimiento/producto/eliminarFisico/${prod.nomprod}`;
+							botonEliminar.onclick = () => {
+								Swal.fire({
+									title: "Eliminar " + prod.nomprod + "  Definitivamente?",
+									text: "",
+									icon: "warning",
+									showCancelButton: true,
+									confirmButtonColor: "#3085d6",
+									cancelButtonColor: "#d33",
+									confirmButtonText: "Si, eliminar!"
+								}).then(async (result) => {
+									if (result.isConfirmed) {
+										//window.location.href = `/mantenimiento/producto/eliminarAccRap/${encodeURIComponent(prod.nomprod)}`;
+										const response = await fetch(`/mantenimiento/producto/eliminarFisico/${encodeURIComponent(prod.nomprod)}`, {
+											method: 'GET',
+										});
+										if (!response.ok) {
+											Swal.fire({
+												icon: "error",
+												title: "Producto no eliminado!",
+												timer: 2000
+											});
+											throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+
+										} else {
+
+											if (entradaBuscador != "") {
+												entradaBuscador.value = "";
+												entradaBuscador.dispatchEvent(new Event('input'));
+											} else {
+												if (selectCategoria) {
+													selectCategoria.dispatchEvent(new Event('change'));
+												}
+
+											}
+
+											await Swal.fire({
+												title: "Producto Eliminado",
+												icon: "success",
+												timer: 1000,
+												showConfirmButton: false
+											});
+										}
+									}
+								});
+
+							};
+							
+							
+							const enlaceEditar = document.createElement('a');
+							enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
+							enlaceEditar.href = `/mantenimiento/producto/reactivar/${prod.nomprod}`;
+
+							columna6.appendChild(enlaceEditar);
 							columna6.appendChild(botonEliminar);
 
 							fila.appendChild(columna0);
@@ -232,7 +291,6 @@ async function buscar(inputElement, suggestionsId) {
 							fila.appendChild(columna5);
 							fila.appendChild(columna6);
 							sugerencias.appendChild(fila);
-
 						});
 
 
@@ -356,7 +414,7 @@ async function buscar(inputElement, suggestionsId) {
 //DETECCION DE FILTRO POR SELECT CATEGORÍAS
 // Detectar el cambio en el valor del select
 
-const selectCategoria = document.getElementById('nomcateg');
+
 if (selectCategoria) {
 	selectCategoria.addEventListener('change', async function() {
 		const selectedValue = this.value; // Obtiene el valor seleccionado
@@ -366,6 +424,123 @@ if (selectCategoria) {
 
 		if (selectedValue) {
 			//alert('Has seleccionado: ' + selectedValue);
+
+			if (selectedValue === "ELIMINADOS") {
+				//console.log()
+				try {
+					const response = await fetch(`/mantenimiento/producto/productosEliminados`);
+					if (!response.ok) {
+						throw new Error(`Error en la respuesta del servidor DetalleProducto: ${response.statusText}`);
+					}
+					const prodDetalle = await response.json();
+					if (prodDetalle.length === 0) {
+						console.warn("No se encontró en Datelle de Productos.");
+						return;
+					}
+					prodDetalle.slice(0, 10).forEach(prod => {
+
+						const fila = document.createElement('tr');
+
+						const columna0 = document.createElement('th');
+						//columna1.scope = "row";
+						columna0.innerHTML = "-";
+
+						const columna1 = document.createElement('td');
+						columna1.innerHTML = prod.nomprod;
+
+						const columna2 = document.createElement('td');
+						columna2.innerHTML = prod.precventa.toFixed(2);
+
+						const columna3 = document.createElement('td');
+						columna3.innerHTML = "-";
+
+
+						const columna4 = document.createElement('td');
+						columna4.innerHTML = "-";
+
+						const columna5 = document.createElement('td');
+						columna5.innerHTML = "-";
+
+						/*
+						const botonEliminar = document.createElement('a');
+						botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
+						botonEliminar.href = `/mantenimiento/producto/eliminarFisico/${prod.nomprod}`;*/
+
+						const columna6 = document.createElement('td');
+						const botonEliminar = document.createElement('a');
+						botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
+						botonEliminar.onclick = () => {
+							Swal.fire({
+								title: "Eliminar " + prod.nomprod + "  Definitivamente?",
+								text: "",
+								icon: "warning",
+								showCancelButton: true,
+								confirmButtonColor: "#3085d6",
+								cancelButtonColor: "#d33",
+								confirmButtonText: "Si, eliminar!"
+							}).then(async (result) => {
+								if (result.isConfirmed) {
+									//window.location.href = `/mantenimiento/producto/eliminarAccRap/${encodeURIComponent(prod.nomprod)}`;
+									const response = await fetch(`/mantenimiento/producto/eliminarFisico/${encodeURIComponent(prod.nomprod)}`, {
+										method: 'GET',
+									});
+									if (!response.ok) {
+										Swal.fire({
+											icon: "error",
+											title: "Producto no eliminado!",
+											timer: 2000
+										});
+										throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+
+									} else {
+
+										if (entradaBuscador != "") {
+											entradaBuscador.value = "";
+											entradaBuscador.dispatchEvent(new Event('input'));
+										} else {
+											if (selectCategoria) {
+												selectCategoria.dispatchEvent(new Event('change'));
+											}
+
+										}
+
+										await Swal.fire({
+											title: "Producto Eliminado",
+											icon: "success",
+											timer: 1000,
+											showConfirmButton: false
+										});
+									}
+								}
+							});
+
+						};
+						const enlaceEditar = document.createElement('a');
+						enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
+						enlaceEditar.href = `/mantenimiento/producto/reactivar/${prod.nomprod}`;
+
+						columna6.appendChild(enlaceEditar);
+						columna6.appendChild(botonEliminar);
+
+						fila.appendChild(columna0);
+						fila.appendChild(columna1);
+						fila.appendChild(columna2);
+						fila.appendChild(columna3);
+						fila.appendChild(columna4);
+						fila.appendChild(columna5);
+						fila.appendChild(columna6);
+						sugerencias.appendChild(fila);
+					});
+
+
+
+				} catch (error) {
+					console.error("Error al buscar en Detalle Productos", error);
+				}
+
+
+
+			}
 
 			try {
 				const response = await fetch(`/mantenimiento/producto/prodporcategoria?nomcateg=${encodeURIComponent(selectedValue)}`);
@@ -650,6 +825,11 @@ async function actualizarNombre(nombre) {
 
 
 
+
+
+
+
+
 // FUNCIONES PARA HTML FORM DE PRECIOS
 
 
@@ -691,77 +871,79 @@ async function buscarPrecios(inputElement, suggestionsId) {
 				//Enviar sugerencias al UL
 				productos.slice(0, 10).forEach(prod => {
 
-					const fila = document.createElement('tr');
+					if (prod.nomcateg != "ELIMINADOS") { //Para no listar productos que no se venden o eliminados
 
-					const columna0 = document.createElement('th');
-					const enlaceEditar = document.createElement('a');
-					enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
-					enlaceEditar.onclick = () => actualizarPrecio(prod.nomprod, prod.preccompra, prod.precventa);
+						const fila = document.createElement('tr');
+
+						const columna0 = document.createElement('th');
+						const enlaceEditar = document.createElement('a');
+						enlaceEditar.className = "btn btn-primary fa-solid fa-pen-to-square";
+						enlaceEditar.onclick = () => actualizarPrecio(prod.nomprod, prod.preccompra, prod.precventa);
 
 
-					const columna1 = document.createElement('td');
-					columna1.innerHTML = prod.nomprod;
+						const columna1 = document.createElement('td');
+						columna1.innerHTML = prod.nomprod;
 
-					const columna2 = document.createElement('td');
-					columna2.innerHTML = prod.precventa.toFixed(2);
+						const columna2 = document.createElement('td');
+						columna2.innerHTML = prod.precventa.toFixed(2);
 
-					const columna3 = document.createElement('td');
-					columna3.innerHTML = prod.preccompra.toFixed(2);
+						const columna3 = document.createElement('td');
+						columna3.innerHTML = prod.preccompra.toFixed(2);
 
-					const columna4 = document.createElement('td');
-					columna4.innerHTML = prod.ganancia.toFixed(2);
+						const columna4 = document.createElement('td');
+						columna4.innerHTML = prod.ganancia.toFixed(2);
 
-					const columna5 = document.createElement('td');
-					const botonEliminar = document.createElement('a');
-					botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
-					botonEliminar.onclick = () => {
-						Swal.fire({
-							title: "Eliminar " + prod.nomprod + "  Definitivamente?",
-							text: "",
-							icon: "warning",
-							showCancelButton: true,
-							confirmButtonColor: "#3085d6",
-							cancelButtonColor: "#d33",
-							confirmButtonText: "Si, eliminar!"
-						}).then(async (result) => {
-							if (result.isConfirmed) {
-								//window.location.href = `/mantenimiento/producto/eliminarAccRap/${encodeURIComponent(prod.nomprod)}`;
-								const response = await fetch(`/mantenimiento/producto/eliminarAccRap?` + new URLSearchParams({ nombre: prod.nomprod }));
-								if (!response.ok) {
-									Swal.fire({
-										icon: "error",
-										title: "Producto no eliminado!",
-										timer: 2000
-									});
-									throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+						const columna5 = document.createElement('td');
+						const botonEliminar = document.createElement('a');
+						botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
+						botonEliminar.onclick = () => {
+							Swal.fire({
+								title: "Eliminar " + prod.nomprod,
+								text: "",
+								icon: "warning",
+								showCancelButton: true,
+								confirmButtonColor: "#3085d6",
+								cancelButtonColor: "#d33",
+								confirmButtonText: "Si, eliminar!"
+							}).then(async (result) => {
+								if (result.isConfirmed) {
+									//window.location.href = `/mantenimiento/producto/eliminarAccRap/${encodeURIComponent(prod.nomprod)}`;
+									const response = await fetch(`/mantenimiento/producto/eliminarAccRap?` + new URLSearchParams({ nombre: prod.nomprod }));
+									if (!response.ok) {
+										Swal.fire({
+											icon: "error",
+											title: "Producto no eliminado!",
+											timer: 2000
+										});
+										throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
 
-								} else {
+									} else {
 
-									if (selectCategoriaPrecios) {
-										selectCategoriaPrecios.dispatchEvent(new Event('change'));
+										if (selectCategoriaPrecios) {
+											selectCategoriaPrecios.dispatchEvent(new Event('change'));
+										}
+
+										await Swal.fire({
+											title: "Producto Eliminado",
+											icon: "success",
+											timer: 1000,
+											showConfirmButton: false
+										});
 									}
-
-									await Swal.fire({
-										title: "Producto Eliminado",
-										icon: "success",
-										timer: 1000,
-										showConfirmButton: false
-									});
 								}
-							}
-						});
-					};
-					columna5.appendChild(botonEliminar);
+							});
+						};
+						columna5.appendChild(botonEliminar);
 
-					columna0.appendChild(enlaceEditar);
-					fila.appendChild(columna0);
-					fila.appendChild(columna1);
-					fila.appendChild(columna2);
-					fila.appendChild(columna3);
-					fila.appendChild(columna4);
-					fila.appendChild(columna5);
-					sugerencias.appendChild(fila);
-
+						columna0.appendChild(enlaceEditar);
+						fila.appendChild(columna0);
+						fila.appendChild(columna1);
+						fila.appendChild(columna2);
+						fila.appendChild(columna3);
+						fila.appendChild(columna4);
+						fila.appendChild(columna5);
+						sugerencias.appendChild(fila);
+					}
 				});
 			} catch (error) {
 				console.error("Error al buscar Productos...", error);
@@ -820,7 +1002,7 @@ if (selectCategoriaPrecios) {
 					botonEliminar.className = "btn btn-danger fa-solid fa-delete-left ms-3";
 					botonEliminar.onclick = () => {
 						Swal.fire({
-							title: "Eliminar " + prod.nomprod + "  Definitivamente?",
+							title: "Eliminar " + prod.nomprod,
 							text: "",
 							icon: "warning",
 							showCancelButton: true,
@@ -967,18 +1149,28 @@ async function actualizarPrecio(nombre, preciocompra, precioventa) {
 
 
 
-
-
-
-/* Realiza una petición cada 14 minutos (14 * 60 * 1000 ms)*/
 setInterval(() => {
-    fetch('/venta/accesosDirectos') // Reemplaza con tu endpoint de "ping"
-        .then(response => {
-            if (response.ok) {
-                console.log('Aplicación activa:', new Date().toISOString());
-            } else {
-                console.error('Error al realizar ping:', response.statusText);
-            }
-        })
-        .catch(error => console.error('Error de conexión:', error));
-}, 10 * 60 * 1000);
+	fetch('/api/ping') // Reemplaza con tu endpoint de "ping"
+		.then(response => {
+			if (response.ok) {
+				console.log('Aplicación activa:', new Date().toISOString());
+			} else {
+				console.error('Error al realizar ping:', response.statusText);
+			}
+		})
+		.catch(error => console.error('Error de conexión:', error));
+}, 5 * 60 * 1000);
+
+
+/* Realiza una petición cada 14 minutos (14 * 60 * 1000 ms)
+setInterval(() => {
+	fetch('/venta/accesosDirectos') // Reemplaza con tu endpoint de "ping"
+		.then(response => {
+			if (response.ok) {
+				console.log('Aplicación activa:', new Date().toISOString());
+			} else {
+				console.error('Error al realizar ping:', response.statusText);
+			}
+		})
+		.catch(error => console.error('Error de conexión:', error));
+}, 10 * 60 * 1000);*/
