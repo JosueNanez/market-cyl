@@ -79,15 +79,6 @@
 								</div>
 							</div>
 
-							<!-- Fecha de Vencimiento -->
-							<div class="mb-3">
-								<label for="fecvenc" class="form-label">Fecha de Vencimiento</label>
-								<input type="date" class="form-control" id="fecvenc" name="fecvenc"
-									th:field="*{fecvenc}">
-								<div class="text-danger" th:if="${#fields.hasErrors('fecvenc')}" th:errors="*{fecvenc}">
-								</div>
-							</div>
-
 							<!-- Precio de Compra -->
 							<div class="mb-3">
 								<label for="preccompra" class="form-label">Precio de Compra</label>
@@ -105,6 +96,16 @@
 									th:field="*{detalleproducto.precventa}">
 								<div class="text-danger" th:if="${#fields.hasErrors('detalleproducto.precventa')}"
 									th:errors="*{detalleproducto.precventa}">
+								</div>
+							</div>
+							
+
+							<!-- Fecha de Vencimiento -->
+							<div class="mb-3">
+								<label for="fecvenc" class="form-label">Fecha de Vencimiento</label>
+								<input type="date" class="form-control" id="fecvenc" name="fecvenc"
+									th:field="*{fecvenc}">
+								<div class="text-danger" th:if="${#fields.hasErrors('fecvenc')}" th:errors="*{fecvenc}">
 								</div>
 							</div>
 

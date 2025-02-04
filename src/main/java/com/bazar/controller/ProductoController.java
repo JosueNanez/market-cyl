@@ -1,6 +1,7 @@
 package com.bazar.controller;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,9 +75,20 @@ public class ProductoController {
 	@GetMapping("/registro")
 	public String mostrarMantenimientoProducto(Model modelo, Model proveed, Model categ) { //
 		ProductoDTO producto = new ProductoDTO();
+		
+		//Código para autocompletado rapido
+		LocalDate fechaActual = LocalDate.now();
+		LocalDate fechaVencimiento = fechaActual.plusDays(15);
+		producto.setFecvenc(fechaVencimiento);
+		producto.setNomprov("CAQUETA");
+		producto.setNomcateg("NUEVOS");
+		producto.setStockminimo(5);
+		producto.setStockcodigo(5); //Hasta aquí Código para autocompletado rapido
+		
 	    modelo.addAttribute("producto", producto);
 	    proveed.addAttribute("proveedores", servProveedor.listarProveedores());
 	    categ.addAttribute("categorias", servCategoria.listarCategorias());
+	    System.out.println(fechaVencimiento);
 		return "mantenimiento_producto";
 	}
 	@PostMapping("/registro")
